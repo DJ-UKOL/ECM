@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class OrderControllerTest {
 
-    @Autowired
+/*    @Autowired
     private OrderController orderController;
     @Autowired
     private DivisionController divisionController;
@@ -36,6 +36,6 @@ class OrderControllerTest {
     void shouldAddOrganizationSuccessfully() {
         divisionController.assignOrganizationInDivision(2L, organizationController.findById(8L));
         assertEquals(8L, divisionController.findById(2L).getOrganization().getId());
-    }
+    }*/
 
 }

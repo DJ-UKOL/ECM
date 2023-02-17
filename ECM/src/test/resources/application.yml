@@ -1,0 +1,19 @@
+logging:
+  level:
+    org:
+      hibernate:
+        type: TRACE
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ECMdb
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql:
+      true

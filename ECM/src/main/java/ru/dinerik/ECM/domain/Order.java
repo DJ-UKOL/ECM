@@ -42,8 +42,8 @@ public class Order {
     @ManyToMany(mappedBy = "orderExecutors", fetch = FetchType.EAGER)
     private Set<Employee> executors = new HashSet<>();           // Исполнители поручения
 
-    @Transient
-    private DocumentState documentState = new PrepareState();       // Устанавливаем статус "подготовка документа"
+    @Enumerated
+    private LeaveOrderState orderState;
 
     public Order(String subject, String text) {
         this.subject = subject;

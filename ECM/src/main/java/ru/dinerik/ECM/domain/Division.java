@@ -17,7 +17,7 @@ public class Division {
     @NotBlank(message = "Поле Наименование подразделения не должно быть пустым!")
     @Column
     private String fullName;            // Наименование подразделения
-    @NotBlank(message = "Поле Контактные данные не должны быть пустыми!")
+    @NotBlank(message = "Поле Контактные данные не должно быть пустым!")
     @Column
     private String contactDetails;      // Контактные данные
 

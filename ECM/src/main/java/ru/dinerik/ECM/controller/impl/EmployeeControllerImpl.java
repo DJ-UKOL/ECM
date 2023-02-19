@@ -2,7 +2,6 @@ package ru.dinerik.ECM.controller.impl;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.EmployeeController;
 import ru.dinerik.ECM.dto.employee.EmployeeForRequest;

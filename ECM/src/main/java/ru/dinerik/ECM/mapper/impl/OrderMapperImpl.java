@@ -49,7 +49,7 @@ public class OrderMapperImpl implements OrderMapper {
                 source.getControlSign(),
                 source.getPerformanceSign(),
                 source.getText(),
-                source.getDocumentState().getStatus()
+                source.getOrderState().getStatus()
         );
 
         if(source.getAuthor() != null) {

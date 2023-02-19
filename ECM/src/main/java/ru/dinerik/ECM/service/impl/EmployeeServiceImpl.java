@@ -28,15 +28,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     // Получить список всех сотрудников с пагинацией и сортировкой
     @Override
     public List<Employee> findAll(Optional<Integer> page, Optional<Integer> employeePerPage, Optional<String> sortBy) {
-        if (page.isPresent() && employeePerPage.isPresent()) {
-            return sortBy.map(s -> repository
-                            .findAll(PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
-                            .getContent())
+
+        return page.isPresent() && employeePerPage.isPresent() ?
+                sortBy.map(s -> repository
+                        .findAll(PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
+                        .getContent())
                     .orElseGet(() -> repository
-                            .findAll(PageRequest.of(page.get(), employeePerPage.get()))
-                            .getContent());
-        }
-        return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
+                        .findAll(PageRequest.of(page.get(), employeePerPage.get()))
+                        .getContent()) :
+                sortBy.map(s -> repository
+                        .findAll(Sort.by(s)))
+                        .orElseGet(repository::findAll);
     }
 
     // Получить сотрудника по id

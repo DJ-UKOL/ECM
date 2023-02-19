@@ -70,8 +70,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public List<Order> createOder(Order order) {
-        order.setDocumentState(new PrepareState());         // Установить статус "Подготовка документа"
+        order.setOrderState(LeaveOrderState.PREPARE);         // Установить статус "Подготовка документа"
         repository.save(order);
+        order.setOrderState(order.getOrderState().nextState(true));         // Установить статус "Подготовка документа"
         return repository.findAll();
     }
 
@@ -81,12 +82,8 @@ public class OrderServiceImpl implements OrderService {
     public Order assignPerformanceSign(Long id, Boolean performanceSign) {
         Order order = findById(id);
         order.setPerformanceSign(performanceSign);
-        if(performanceSign) {
-            order.setDocumentState(new ControlState());     // Установить статус "Документ проходит контроль"
-        } else {
-            order.setDocumentState(new PerformState());     // Установить статус "Документ в работе"
-        }
         repository.save(order);
+        order.setOrderState(order.getOrderState().nextState(performanceSign));     // Установить статус "Документ проходит контроль"
         return findById(id);
     }
 
@@ -95,13 +92,14 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order assignControlSign(Long id, Boolean controlSign) {
         Order order = findById(id);
-        order.setControlSign(controlSign);
-        if(controlSign) {
-            order.setDocumentState(new AcceptState());     // Установить статус "Документ принят"
-        } else {
-            order.setDocumentState(new ReformState());      // Установить статус "Документ на доработке"
+        if(!order.getPerformanceSign())
+        {
+            System.out.println("Контроль не может быть установлен, пока нет исполнения");
+            return findById(id);
         }
         repository.save(order);
+        order.setControlSign(controlSign);
+        order.setOrderState(order.getOrderState().nextState(controlSign)); // Установить статус "Документ принят" или "Документ на доработке"
         return findById(id);
     }
 

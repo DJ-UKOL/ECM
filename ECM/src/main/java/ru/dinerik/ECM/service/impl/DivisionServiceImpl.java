@@ -6,11 +6,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dinerik.ECM.domain.Division;
+import ru.dinerik.ECM.domain.Organization;
 import ru.dinerik.ECM.repository.DivisionRepository;
 import ru.dinerik.ECM.service.DivisionService;
 import ru.dinerik.ECM.service.EmployeeService;
 import ru.dinerik.ECM.service.OrganizationService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -50,6 +52,25 @@ public class DivisionServiceImpl implements DivisionService {
     public Division findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Подразделение с номером id: " + id + " не найдено"));
+    }
+
+    // Поиск подразделения по аттрибутам
+    @Override
+    public List<Division> search(Optional<String> attribute, Optional<String> searchText) {
+
+        List<Division> divisionList = new ArrayList<>();
+
+        if (attribute.isPresent() && searchText.isPresent()) {
+            switch (attribute.get().toLowerCase()) {
+                case "fullname" -> {
+                    divisionList = repository.findAllByFullNameLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+                case "contactdetails" -> {
+                    divisionList = repository.findAllByContactDetailsIgnoreCase("%" + searchText.get() + "%");
+                }
+            }
+        }
+        return divisionList;
     }
 
     // Добавить новое подразделение

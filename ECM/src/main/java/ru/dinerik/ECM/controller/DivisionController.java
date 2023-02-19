@@ -27,6 +27,12 @@ public interface DivisionController {
     @GetMapping("/{id}")
     DivisionForResponse findById(@PathVariable("id") Long id);
 
+    // Поиск подразделения по аттрибутам
+    // http://localhost:8080/division/search?attr=fullName&value=Отдел
+    @GetMapping( "/search")
+    List<DivisionForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+                                         @RequestParam(value = "value", required = false) Optional<String> searchText);
+
     // Добавить новое подразделение
     @PostMapping
     List<DivisionForResponse> createDivision(@RequestBody DivisionForRequest request);

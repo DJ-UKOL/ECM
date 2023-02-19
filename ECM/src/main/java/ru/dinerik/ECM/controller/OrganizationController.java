@@ -25,6 +25,12 @@ public interface OrganizationController {
     @GetMapping("/{id}")
     OrganizationForResponse findById(@PathVariable("id") Long id);
 
+    // Поиск организации по аттрибутам
+    // http://localhost:8080/organization/search?attr=fullName&value=Эвер
+    @GetMapping( "/search")
+    List<OrganizationForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+                                     @RequestParam(value = "value", required = false) Optional<String> searchText);
+
     // Добавить новую организацию
     @PostMapping
     List<OrganizationForResponse> createOrganization(@RequestBody OrganizationForRequest request);

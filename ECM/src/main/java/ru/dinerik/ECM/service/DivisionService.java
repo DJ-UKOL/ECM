@@ -1,6 +1,7 @@
 package ru.dinerik.ECM.service;
 
 import ru.dinerik.ECM.domain.Division;
+import ru.dinerik.ECM.domain.Organization;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,9 @@ public interface DivisionService {
 
     // Получить подразделение по id
     Division findById(Long id);
+
+    // Поиск подразделения по аттрибутам
+    List<Division> search(Optional<String> attribute, Optional<String> searchText);
 
     // Добавить новое подразделение
     List<Division> createDivision(Division division);

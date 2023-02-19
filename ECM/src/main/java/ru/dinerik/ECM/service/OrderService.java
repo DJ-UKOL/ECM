@@ -1,5 +1,6 @@
 package ru.dinerik.ECM.service;
 
+import ru.dinerik.ECM.domain.Division;
 import ru.dinerik.ECM.domain.Order;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,9 @@ public interface OrderService {
 
     // Получить поручение по id
     Order findById(Long id);
+
+    // Поиск поручений по аттрибутам
+    List<Order> search(Optional<String> attribute, Optional<String> searchText);
 
     // Добавить новое поручение
     List<Order> createOder(Order order);

@@ -5,10 +5,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dinerik.ECM.domain.Employee;
 import ru.dinerik.ECM.domain.Organization;
 import ru.dinerik.ECM.repository.OrganizationRepository;
 import ru.dinerik.ECM.service.EmployeeService;
 import ru.dinerik.ECM.service.OrganizationService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -46,6 +49,28 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Organization findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Организация с номером id: " + id + " не найдена"));
+    }
+
+    // Поиск организации по аттрибутам
+    @Override
+    public List<Organization> search(Optional<String> attribute, Optional<String> searchText) {
+
+        List<Organization> organizationList = new ArrayList<>();
+
+        if (attribute.isPresent() && searchText.isPresent()) {
+            switch (attribute.get().toLowerCase()) {
+                case "fullname" -> {
+                    organizationList = repository.findAllByFullNameLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+                case "postaladdress" -> {
+                    organizationList = repository.findAllByPostalAddressLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+                case "legaladdress" -> {
+                    organizationList = repository.findAllByLegalAddressLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+            }
+        }
+        return organizationList;
     }
 
     // Добавить новую организацию

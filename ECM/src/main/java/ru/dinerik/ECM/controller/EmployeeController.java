@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequestMapping("/employee")
 public interface EmployeeController {
 
-    // Получить список всех сотрудников в формате DTO
+    // Получить список всех сотрудников с пагинацией и сортировкой в формате DTO
     // http://localhost:8080/employee?page=1&per_page=3
     // http://localhost:8080/employee?sort_by=lastname
     // http://localhost:8080/employee?page=1&per_page=3&sort_by=lastname
@@ -24,6 +24,12 @@ public interface EmployeeController {
     // Получить сотрудника по id
     @GetMapping("/{id}")
     EmployeeForResponse findById(@PathVariable("id") Long id);
+
+    // Поиск сотрудников по аттрибутам
+    // http://localhost:8080/employee/search?attr=lastname&value=Эрик
+    @GetMapping( "/search")
+    List<EmployeeForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+                                     @RequestParam(value = "value", required = false) Optional<String> searchText);
 
     // Добавить нового сотрудника
     @PostMapping
@@ -37,4 +43,5 @@ public interface EmployeeController {
     // Удалить сотрудника по id
     @DeleteMapping("/{id}")
     List<EmployeeForResponse> deleteEmployee(@PathVariable Long id);
+
 }

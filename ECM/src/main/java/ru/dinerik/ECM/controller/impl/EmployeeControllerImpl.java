@@ -2,6 +2,7 @@ package ru.dinerik.ECM.controller.impl;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.EmployeeController;
 import ru.dinerik.ECM.dto.employee.EmployeeForRequest;
@@ -26,8 +27,7 @@ public class EmployeeControllerImpl implements EmployeeController {
         this.mapper = mapper;
     }
 
-
-    // Получить список всех сотрудников в формате DTO
+    // Получить список всех сотрудников с пагинацией и сортировкой в формате DTO
     @Override
     @GetMapping("")
     public List<EmployeeForResponse> employeeTable(
@@ -44,6 +44,15 @@ public class EmployeeControllerImpl implements EmployeeController {
     @GetMapping("/{id}")
     public EmployeeForResponse findById(@PathVariable("id") Long id){
         return mapper.responseToEmployeeDto(service.findById(id));
+    }
+
+    // Поиск сотрудников по аттрибутам
+    @Override
+    @GetMapping("/search")
+    public List<EmployeeForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+                                            @RequestParam(value = "value", required = false) Optional<String> searchText) {
+        return service.search(attribute, searchText).stream()
+                .map(mapper::responseToEmployeeDto).collect(Collectors.toList());
     }
 
     // Добавить нового сотрудника
@@ -70,4 +79,5 @@ public class EmployeeControllerImpl implements EmployeeController {
         return service.deleteEmployee(id).stream()
                 .map(mapper::responseToEmployeeDto).collect(Collectors.toList());
     }
+
 }

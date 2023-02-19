@@ -1,5 +1,6 @@
 package ru.dinerik.ECM.service;
 
+import ru.dinerik.ECM.domain.Employee;
 import ru.dinerik.ECM.domain.Organization;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public interface OrganizationService {
 
     // Получить организацию по id
     Organization findById(Long id);
+
+    // Поиск организации по аттрибутам
+    List<Organization> search(Optional<String> attribute, Optional<String> searchText);
 
     // Добавить новую организацию
     List<Organization> createOrganization(Organization organization);

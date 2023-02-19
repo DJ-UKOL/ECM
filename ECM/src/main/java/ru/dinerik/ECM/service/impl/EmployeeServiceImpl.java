@@ -9,6 +9,7 @@ import ru.dinerik.ECM.domain.Employee;
 import ru.dinerik.ECM.repository.EmployeeRepository;
 import ru.dinerik.ECM.service.EmployeeService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -24,16 +25,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.repository = repository;
     }
 
-    // Получить список всех сотрудников
+    // Получить список всех сотрудников с пагинацией и сортировкой
     @Override
-    public List<Employee> findAll(Optional<Integer> page, Optional<Integer> employeePerPage, Optional<String> sortBy){
+    public List<Employee> findAll(Optional<Integer> page, Optional<Integer> employeePerPage, Optional<String> sortBy) {
         if (page.isPresent() && employeePerPage.isPresent()) {
             return sortBy.map(s -> repository
-                    .findAll(PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
-                    .getContent())
+                            .findAll(PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
+                            .getContent())
                     .orElseGet(() -> repository
-                    .findAll(PageRequest.of(page.get(), employeePerPage.get()))
-                    .getContent());
+                            .findAll(PageRequest.of(page.get(), employeePerPage.get()))
+                            .getContent());
         }
         return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
     }
@@ -43,6 +44,31 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Сотрудник с номером id: " + id + " не найден"));
+    }
+
+    // Поиск сотрудников по аттрибутам
+    @Override
+    public List<Employee> search(Optional<String> attribute, Optional<String> searchText) {
+
+        List<Employee> employeeList = new ArrayList<>();
+
+        if (attribute.isPresent() && searchText.isPresent()) {
+            switch (attribute.get().toLowerCase()) {
+                case "lastname" -> {
+                    employeeList = repository.findAllByLastnameLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+                case "firstname" -> {
+                    employeeList = repository.findAllByFirstnameLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+                case "patronymic" -> {
+                    employeeList = repository.findAllByPatronymicLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+                case "jobtitle" -> {
+                    employeeList = repository.findAllByJobTitleLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+            }
+        }
+        return employeeList;
     }
 
     // Добавить нового сотрудника

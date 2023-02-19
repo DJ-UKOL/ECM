@@ -44,6 +44,15 @@ public class OrganizationControllerImpl implements OrganizationController {
         return mapper.responseToOrganizationDto(service.findById(id));
     }
 
+    // Поиск организации по аттрибутам
+    @Override
+    @GetMapping("/search")
+    public List<OrganizationForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+                                                @RequestParam(value = "value", required = false) Optional<String> searchText) {
+        return service.search(attribute, searchText).stream()
+                .map(mapper::responseToOrganizationDto).collect(Collectors.toList());
+    }
+
     // Добавить новую организацию
     @Override
     @PostMapping

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.OrderController;
+import ru.dinerik.ECM.dto.division.DivisionForResponse;
 import ru.dinerik.ECM.dto.order.OrderForRequest;
 import ru.dinerik.ECM.dto.order.OrderForResponse;
 import ru.dinerik.ECM.mapper.OrderMapper;
@@ -41,6 +42,15 @@ public class OrderControllerImpl implements OrderController {
     @GetMapping("/{id}")
     public OrderForResponse findById(@PathVariable("id") Long id){
         return mapper.responseToOrderDto(service.findById(id));
+    }
+
+    // Поиск поручений по аттрибутам
+    @Override
+    @GetMapping("/search")
+    public List<OrderForResponse> search(@RequestParam(value = "attr") Optional<String> attribute,
+                                            @RequestParam(value = "value") Optional<String> searchText) {
+        return service.search(attribute, searchText).stream()
+                .map(mapper::responseToOrderDto).collect(Collectors.toList());
     }
 
     // Добавить новое поручение

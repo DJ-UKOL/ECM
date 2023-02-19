@@ -1,7 +1,9 @@
 package ru.dinerik.ECM.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.dinerik.ECM.dto.division.DivisionForResponse;
 import ru.dinerik.ECM.dto.order.OrderForRequest;
 import ru.dinerik.ECM.dto.order.OrderForResponse;
 
@@ -25,6 +27,12 @@ public interface OrderController {
     @GetMapping("/{id}")
     OrderForResponse findById(@PathVariable("id") Long id);
 
+    // Поиск поручений по аттрибутам
+    // http://localhost:8080/order/search?attr=subject&value=налог
+    @GetMapping( "/search")
+    List<OrderForResponse> search(@RequestParam(value = "attr") Optional<String> attribute,
+                                     @RequestParam(value = "value") Optional<String> searchText);
+
     // Добавить новое поручение
     @PostMapping
     List<OrderForResponse> createOrder(@RequestBody OrderForRequest request);
@@ -47,4 +55,5 @@ public interface OrderController {
     // Удалить поручение по id
     @DeleteMapping("/{id}")
     List<OrderForResponse> deleteOrder(@PathVariable Long id);
+
 }

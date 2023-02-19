@@ -10,6 +10,7 @@ import ru.dinerik.ECM.repository.OrderRepository;
 import ru.dinerik.ECM.service.OrderService;
 import ru.dinerik.ECM.statemachine.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -44,6 +45,25 @@ public class OrderServiceImpl implements OrderService {
     public Order findById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Поручение с номером id: " + id + " не найдено"));
+    }
+
+    // Поиск поручений по аттрибутам
+    @Override
+    public List<Order> search(Optional<String> attribute, Optional<String> searchText) {
+
+        List<Order> orderList = new ArrayList<>();
+
+        if (attribute.isPresent() && searchText.isPresent()) {
+            switch (attribute.get().toLowerCase()) {
+                case "subject" -> {
+                    orderList = repository.findAllBySubjectLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+                case "text" -> {
+                    orderList = repository.findAllByTextLikeIgnoreCase("%" + searchText.get() + "%");
+                }
+            }
+        }
+        return orderList;
     }
 
     // Добавить новое поручение

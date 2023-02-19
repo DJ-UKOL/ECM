@@ -46,6 +46,15 @@ public class DivisionControllerImpl implements DivisionController {
         return mapper.responseToDivisionDto(service.findById(id));
     }
 
+    // Поиск подразделения по аттрибутам
+    @Override
+    @GetMapping("/search")
+    public List<DivisionForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+                                                @RequestParam(value = "value", required = false) Optional<String> searchText) {
+        return service.search(attribute, searchText).stream()
+                .map(mapper::responseToDivisionDto).collect(Collectors.toList());
+    }
+
     // Добавить новое подразделение
     @Override
     @PostMapping

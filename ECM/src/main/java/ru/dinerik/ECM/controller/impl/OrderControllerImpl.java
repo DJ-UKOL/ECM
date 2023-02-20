@@ -43,7 +43,7 @@ public class OrderControllerImpl implements OrderController {
         return mapper.responseToOrderDto(service.findById(id));
     }
 
-    // Поиск поручений по аттрибутам
+    // Поиск поручений по аттрибутам с пагинацией и сортировкой в формате DTO
     @Override
     @GetMapping("/search")
     public List<OrderForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,

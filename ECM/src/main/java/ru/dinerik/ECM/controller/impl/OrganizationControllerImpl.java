@@ -44,7 +44,7 @@ public class OrganizationControllerImpl implements OrganizationController {
         return mapper.responseToOrganizationDto(service.findById(id));
     }
 
-    // Поиск организации по аттрибутам
+    // Поиск организации по аттрибутам с пагинацией и сортировкой в формате DTO
     @Override
     @GetMapping("/search")
     public List<OrganizationForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
@@ -52,6 +52,7 @@ public class OrganizationControllerImpl implements OrganizationController {
                                                 @RequestParam(value = "page", required = false) Optional<Integer> page,
                                                 @RequestParam(value = "per_page", required = false) Optional<Integer> organizationPerPage,
                                                 @RequestParam(value = "sort_by", required = false) Optional<String> sortBy) {
+
         return service.search(attribute, searchText, page, organizationPerPage, sortBy).stream()
                 .map(mapper::responseToOrganizationDto).collect(Collectors.toList());
     }

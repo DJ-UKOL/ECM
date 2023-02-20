@@ -1,6 +1,5 @@
 package ru.dinerik.ECM.service;
 
-import ru.dinerik.ECM.domain.Employee;
 import ru.dinerik.ECM.domain.Organization;
 
 import java.util.List;

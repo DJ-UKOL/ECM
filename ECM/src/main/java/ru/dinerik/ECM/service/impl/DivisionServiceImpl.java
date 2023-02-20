@@ -38,14 +38,11 @@ public class DivisionServiceImpl implements DivisionService {
     @Override
     public List<Division> findAll(Optional<Integer> page, Optional<Integer> divisionPerPage, Optional<String> sortBy) {
         if (page.isPresent() && divisionPerPage.isPresent()) {
-            return sortBy.map(s -> repository
-                            .findAll(PageRequest.of(page.get(), divisionPerPage.get(), Sort.by(s)))
-                            .getContent())
-                    .orElseGet(() -> repository
-                            .findAll(PageRequest.of(page.get(), divisionPerPage.get()))
-                            .getContent());
+            return sortBy.map(s -> repository.findAll(PageRequest.of(page.get(), divisionPerPage.get(), Sort.by(s))).getContent()).orElseGet(() -> repository.findAll(PageRequest.of(page.get(), divisionPerPage.get())).getContent());
         }
-        return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
+        else {
+            return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
+        }
     }
 
     // Получить подразделение по id
@@ -65,9 +62,10 @@ public class DivisionServiceImpl implements DivisionService {
 
         Pageable pageable = null;
 
-        if(page.isPresent() && divisionPerPage.isPresent())
+        if (page.isPresent() && divisionPerPage.isPresent()) {
             pageable = sortBy.map(s -> PageRequest.of(page.get(), divisionPerPage.get(), Sort.by(s)))
                     .orElseGet(() -> PageRequest.of(page.get(), divisionPerPage.get()));
+        }
 
         if (attribute.isPresent() && searchText.isPresent()) {
             switch (attribute.get().toLowerCase()) {

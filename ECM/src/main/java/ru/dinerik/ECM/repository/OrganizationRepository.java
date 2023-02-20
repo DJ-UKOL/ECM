@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
 
-    List<Organization> findAllByFullNameContainingIgnoreCase(Pageable pageable, String fullname);
+    List<Organization> findAllByFullNameContainingIgnoreCase(Pageable pageable, String fullName);
 
     List<Organization> findAllByPostalAddressContainingIgnoreCase(Pageable pageable, String postalAddress);
 

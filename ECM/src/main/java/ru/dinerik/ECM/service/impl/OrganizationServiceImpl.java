@@ -6,13 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.dinerik.ECM.domain.Employee;
 import ru.dinerik.ECM.domain.Organization;
 import ru.dinerik.ECM.repository.OrganizationRepository;
 import ru.dinerik.ECM.service.EmployeeService;
 import ru.dinerik.ECM.service.OrganizationService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,7 +31,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     // Получить список всех организаций
     @Override
-    public List<Organization> findAll(Optional<Integer> page, Optional<Integer> organizationPerPage, Optional<String> sortBy) {
+    public List<Organization> findAll(Optional<Integer> page,
+                                      Optional<Integer> organizationPerPage,
+                                      Optional<String> sortBy) {
         if (page.isPresent() && organizationPerPage.isPresent()) {
             return sortBy.map(s -> repository
                             .findAll(PageRequest.of(page.get(), organizationPerPage.get(), Sort.by(s)))

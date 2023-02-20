@@ -46,7 +46,7 @@ public class DivisionControllerImpl implements DivisionController {
         return mapper.responseToDivisionDto(service.findById(id));
     }
 
-    // Поиск подразделения по аттрибутам
+    // Поиск подразделения по аттрибутам с пагинацией и сортировкой в формате DTO
     @Override
     @GetMapping("/search")
     public List<DivisionForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,

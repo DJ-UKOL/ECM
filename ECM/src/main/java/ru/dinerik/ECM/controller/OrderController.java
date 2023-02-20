@@ -25,11 +25,14 @@ public interface OrderController {
     @GetMapping("/{id}")
     OrderForResponse findById(@PathVariable("id") Long id);
 
-    // Поиск поручений по аттрибутам
+    // Поиск поручений по аттрибутам с пагинацией и сортировкой в формате DTO
     // http://localhost:8080/order/search?attr=subject&value=налог
     @GetMapping( "/search")
-    List<OrderForResponse> search(@RequestParam(value = "attr") Optional<String> attribute,
-                                     @RequestParam(value = "value") Optional<String> searchText);
+    List<OrderForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+                                  @RequestParam(value = "value", required = false) Optional<String> searchText,
+                                  @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                  @RequestParam(value = "per_page", required = false) Optional<Integer> orderPerPage,
+                                  @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
 
     // Добавить новое поручение
     @PostMapping

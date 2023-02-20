@@ -15,8 +15,12 @@ public interface DivisionService {
     // Получить подразделение по id
     Division findById(Long id);
 
-    // Поиск подразделения по аттрибутам
-    List<Division> search(Optional<String> attribute, Optional<String> searchText);
+    // Поиск подразделения по аттрибутам с пагинацией и сортировкой
+    List<Division> search(Optional<String> attribute,
+                          Optional<String> searchText,
+                          Optional<Integer> page,
+                          Optional<Integer> divisionPerPage,
+                          Optional<String> sortBy);
 
     // Добавить новое подразделение
     List<Division> createDivision(Division division);

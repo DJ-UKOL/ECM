@@ -2,6 +2,7 @@ package ru.dinerik.ECM.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,26 +52,34 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .orElseThrow(() -> new NoSuchElementException("Организация с номером id: " + id + " не найдена"));
     }
 
-    // Поиск организации по аттрибутам
+    // Поиск организации по аттрибутам с пагинацией и сортировкой
     @Override
-    public List<Organization> search(Optional<String> attribute, Optional<String> searchText) {
+    public List<Organization> search(Optional<String> attribute,
+                                     Optional<String> searchText,
+                                     Optional<Integer> page,
+                                     Optional<Integer> organizationPerPage,
+                                     Optional<String> sortBy) {
 
-        List<Organization> organizationList = new ArrayList<>();
+        Pageable pageable = null;
+
+        if(page.isPresent() && organizationPerPage.isPresent())
+            pageable = sortBy.map(s -> PageRequest.of(page.get(), organizationPerPage.get(), Sort.by(s)))
+                    .orElseGet(() -> PageRequest.of(page.get(), organizationPerPage.get()));
 
         if (attribute.isPresent() && searchText.isPresent()) {
             switch (attribute.get().toLowerCase()) {
                 case "fullname" -> {
-                    organizationList = repository.findAllByFullNameLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByFullNameContainingIgnoreCase(pageable, searchText.get());
                 }
                 case "postaladdress" -> {
-                    organizationList = repository.findAllByPostalAddressLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByPostalAddressContainingIgnoreCase(pageable, searchText.get());
                 }
                 case "legaladdress" -> {
-                    organizationList = repository.findAllByLegalAddressLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByLegalAddressContainingIgnoreCase(pageable, searchText.get());
                 }
             }
         }
-        return organizationList;
+        return findAll(page, organizationPerPage, sortBy);
     }
 
     // Добавить новую организацию

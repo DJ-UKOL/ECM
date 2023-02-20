@@ -27,11 +27,14 @@ public interface DivisionController {
     @GetMapping("/{id}")
     DivisionForResponse findById(@PathVariable("id") Long id);
 
-    // Поиск подразделения по аттрибутам
+    // Поиск подразделения по аттрибутам с пагинацией и сортировкой в формате DTO
     // http://localhost:8080/division/search?attr=fullName&value=Отдел
     @GetMapping( "/search")
     List<DivisionForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                         @RequestParam(value = "value", required = false) Optional<String> searchText);
+                                     @RequestParam(value = "value", required = false) Optional<String> searchText,
+                                     @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                     @RequestParam(value = "per_page", required = false) Optional<Integer> divisionPerPage,
+                                     @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
 
     // Добавить новое подразделение
     @PostMapping

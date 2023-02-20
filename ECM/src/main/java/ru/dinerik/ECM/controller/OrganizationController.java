@@ -25,11 +25,14 @@ public interface OrganizationController {
     @GetMapping("/{id}")
     OrganizationForResponse findById(@PathVariable("id") Long id);
 
-    // Поиск организации по аттрибутам
+    // Поиск организации по аттрибутам с пагинацией и сортировкой в формате DTO
     // http://localhost:8080/organization/search?attr=fullName&value=Эвер
     @GetMapping( "/search")
     List<OrganizationForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                     @RequestParam(value = "value", required = false) Optional<String> searchText);
+                                         @RequestParam(value = "value", required = false) Optional<String> searchText,
+                                         @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                         @RequestParam(value = "per_page", required = false) Optional<Integer> organizationPerPage,
+                                         @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
 
     // Добавить новую организацию
     @PostMapping

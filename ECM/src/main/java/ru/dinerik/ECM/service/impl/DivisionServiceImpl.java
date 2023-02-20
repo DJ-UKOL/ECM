@@ -2,6 +2,7 @@ package ru.dinerik.ECM.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,23 +55,31 @@ public class DivisionServiceImpl implements DivisionService {
                 .orElseThrow(() -> new NoSuchElementException("Подразделение с номером id: " + id + " не найдено"));
     }
 
-    // Поиск подразделения по аттрибутам
+    // Поиск подразделения по аттрибутам с пагинацией и сортировкой
     @Override
-    public List<Division> search(Optional<String> attribute, Optional<String> searchText) {
+    public List<Division> search(Optional<String> attribute,
+                                 Optional<String> searchText,
+                                 Optional<Integer> page,
+                                 Optional<Integer> divisionPerPage,
+                                 Optional<String> sortBy) {
 
-        List<Division> divisionList = new ArrayList<>();
+        Pageable pageable = null;
+
+        if(page.isPresent() && divisionPerPage.isPresent())
+            pageable = sortBy.map(s -> PageRequest.of(page.get(), divisionPerPage.get(), Sort.by(s)))
+                    .orElseGet(() -> PageRequest.of(page.get(), divisionPerPage.get()));
 
         if (attribute.isPresent() && searchText.isPresent()) {
             switch (attribute.get().toLowerCase()) {
                 case "fullname" -> {
-                    divisionList = repository.findAllByFullNameLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByFullNameContainingIgnoreCase(pageable, searchText.get());
                 }
                 case "contactdetails" -> {
-                    divisionList = repository.findAllByContactDetailsIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByContactDetailsContainingIgnoreCase(pageable, searchText.get());
                 }
             }
         }
-        return divisionList;
+        return findAll(page, divisionPerPage, sortBy);
     }
 
     // Добавить новое подразделение

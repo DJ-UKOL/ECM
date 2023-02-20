@@ -15,8 +15,12 @@ public interface OrganizationService {
     // Получить организацию по id
     Organization findById(Long id);
 
-    // Поиск организации по аттрибутам
-    List<Organization> search(Optional<String> attribute, Optional<String> searchText);
+    // Поиск организации по аттрибутам с пагинацией и сортировкой
+    List<Organization> search(Optional<String> attribute,
+                              Optional<String> searchText,
+                              Optional<Integer> page,
+                              Optional<Integer> organizationPerPage,
+                              Optional<String> sortBy);
 
     // Добавить новую организацию
     List<Organization> createOrganization(Organization organization);

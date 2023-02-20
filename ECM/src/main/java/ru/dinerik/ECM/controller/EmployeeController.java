@@ -25,11 +25,14 @@ public interface EmployeeController {
     @GetMapping("/{id}")
     EmployeeForResponse findById(@PathVariable("id") Long id);
 
-    // Поиск сотрудников по аттрибутам
-    // http://localhost:8080/employee/search?attr=lastname&value=Эрик
+    // Поиск сотрудников по аттрибутам с пагинацией и сортировкой в формате DTO
+    // http://localhost:8080/employee/search?attr=lastname&value=Эрик&page=1&per_page=3&sort_by=lastname
     @GetMapping( "/search")
     List<EmployeeForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                     @RequestParam(value = "value", required = false) Optional<String> searchText);
+                                     @RequestParam(value = "value", required = false) Optional<String> searchText,
+                                     @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                     @RequestParam(value = "per_page", required = false) Optional<Integer> employeePerPage,
+                                     @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
 
     // Добавить нового сотрудника
     @PostMapping

@@ -50,8 +50,11 @@ public class DivisionControllerImpl implements DivisionController {
     @Override
     @GetMapping("/search")
     public List<DivisionForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                                @RequestParam(value = "value", required = false) Optional<String> searchText) {
-        return service.search(attribute, searchText).stream()
+                                            @RequestParam(value = "value", required = false) Optional<String> searchText,
+                                            @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                            @RequestParam(value = "per_page", required = false) Optional<Integer> divisionPerPage,
+                                            @RequestParam(value = "sort_by", required = false) Optional<String> sortBy) {
+        return service.search(attribute, searchText, page, divisionPerPage, sortBy).stream()
                 .map(mapper::responseToDivisionDto).collect(Collectors.toList());
     }
 

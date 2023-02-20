@@ -45,12 +45,15 @@ public class EmployeeControllerImpl implements EmployeeController {
         return mapper.responseToEmployeeDto(service.findById(id));
     }
 
-    // Поиск сотрудников по аттрибутам
+    // Поиск сотрудников по аттрибутам с пагинацией и сортировкой в формате DTO
     @Override
     @GetMapping("/search")
     public List<EmployeeForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                            @RequestParam(value = "value", required = false) Optional<String> searchText) {
-        return service.search(attribute, searchText).stream()
+                                            @RequestParam(value = "value", required = false) Optional<String> searchText,
+                                            @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                            @RequestParam(value = "per_page", required = false) Optional<Integer> employeePerPage,
+                                            @RequestParam(value = "sort_by", required = false) Optional<String> sortBy) {
+        return service.search(attribute, searchText, page, employeePerPage, sortBy).stream()
                 .map(mapper::responseToEmployeeDto).collect(Collectors.toList());
     }
 

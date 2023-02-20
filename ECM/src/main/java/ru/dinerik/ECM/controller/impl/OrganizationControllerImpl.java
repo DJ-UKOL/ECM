@@ -48,8 +48,11 @@ public class OrganizationControllerImpl implements OrganizationController {
     @Override
     @GetMapping("/search")
     public List<OrganizationForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                                @RequestParam(value = "value", required = false) Optional<String> searchText) {
-        return service.search(attribute, searchText).stream()
+                                                @RequestParam(value = "value", required = false) Optional<String> searchText,
+                                                @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                                @RequestParam(value = "per_page", required = false) Optional<Integer> organizationPerPage,
+                                                @RequestParam(value = "sort_by", required = false) Optional<String> sortBy) {
+        return service.search(attribute, searchText, page, organizationPerPage, sortBy).stream()
                 .map(mapper::responseToOrganizationDto).collect(Collectors.toList());
     }
 

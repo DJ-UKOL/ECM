@@ -14,8 +14,12 @@ public interface OrderService {
     // Получить поручение по id
     Order findById(Long id);
 
-    // Поиск поручений по аттрибутам
-    List<Order> search(Optional<String> attribute, Optional<String> searchText);
+    // Поиск поручений по аттрибутам с пагинацией и сортировкой
+    List<Order> search(Optional<String> attribute,
+                       Optional<String> searchText,
+                       Optional<Integer> page,
+                       Optional<Integer> orderPerPage,
+                       Optional<String> sortBy);
 
     // Добавить новое поручение
     List<Order> createOder(Order order);

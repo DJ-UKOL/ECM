@@ -14,8 +14,12 @@ public interface EmployeeService {
     // Получить сотрудника по id
     Employee findById(Long id);
 
-    // Поиск сотрудника по аттрибутам
-    List<Employee> search(Optional<String> attribute, Optional<String> searchText);
+    // Поиск сотрудника по аттрибутам с пагинацией и сортировкой
+    List<Employee> search(Optional<String> attribute,
+                          Optional<String> searchText,
+                          Optional<Integer> page,
+                          Optional<Integer> employeePerPage,
+                          Optional<String> sortBy);
 
     // Добавить нового сотрудника
     List<Employee> createEmployee(Employee employee);

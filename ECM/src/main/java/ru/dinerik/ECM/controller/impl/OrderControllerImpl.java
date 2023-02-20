@@ -46,9 +46,12 @@ public class OrderControllerImpl implements OrderController {
     // Поиск поручений по аттрибутам
     @Override
     @GetMapping("/search")
-    public List<OrderForResponse> search(@RequestParam(value = "attr") Optional<String> attribute,
-                                            @RequestParam(value = "value") Optional<String> searchText) {
-        return service.search(attribute, searchText).stream()
+    public List<OrderForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+                                         @RequestParam(value = "value", required = false) Optional<String> searchText,
+                                         @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                         @RequestParam(value = "per_page", required = false) Optional<Integer> orderPerPage,
+                                         @RequestParam(value = "sort_by", required = false) Optional<String> sortBy) {
+        return service.search(attribute, searchText, page, orderPerPage, sortBy).stream()
                 .map(mapper::responseToOrderDto).collect(Collectors.toList());
     }
 

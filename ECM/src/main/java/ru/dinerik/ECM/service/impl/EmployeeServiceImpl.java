@@ -2,6 +2,7 @@ package ru.dinerik.ECM.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     // Получить список всех сотрудников с пагинацией и сортировкой
     @Override
-    public List<Employee> findAll(Optional<Integer> page, Optional<Integer> employeePerPage, Optional<String> sortBy) {
+    public List<Employee> findAll(Optional<Integer> page,
+                                  Optional<Integer> employeePerPage,
+                                  Optional<String> sortBy) {
 
         return page.isPresent() && employeePerPage.isPresent() ?
                 sortBy.map(s -> repository
@@ -48,29 +51,37 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new NoSuchElementException("Сотрудник с номером id: " + id + " не найден"));
     }
 
-    // Поиск сотрудников по аттрибутам
+    // Поиск сотрудника по аттрибутам с пагинацией и сортировкой
     @Override
-    public List<Employee> search(Optional<String> attribute, Optional<String> searchText) {
+    public List<Employee> search(Optional<String> attribute,
+                                 Optional<String> searchText,
+                                 Optional<Integer> page,
+                                 Optional<Integer> employeePerPage,
+                                 Optional<String> sortBy) {
 
-        List<Employee> employeeList = new ArrayList<>();
+        Pageable pageable = null;
+
+        if(page.isPresent() && employeePerPage.isPresent())
+            pageable = sortBy.map(s -> PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
+                .orElseGet(() -> PageRequest.of(page.get(), employeePerPage.get()));
 
         if (attribute.isPresent() && searchText.isPresent()) {
             switch (attribute.get().toLowerCase()) {
                 case "lastname" -> {
-                    employeeList = repository.findAllByLastnameLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByLastnameContainingIgnoreCase(pageable, searchText.get());
                 }
                 case "firstname" -> {
-                    employeeList = repository.findAllByFirstnameLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByFirstnameContainingIgnoreCase(pageable, searchText.get());
                 }
                 case "patronymic" -> {
-                    employeeList = repository.findAllByPatronymicLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByPatronymicContainingIgnoreCase(pageable, searchText.get());
                 }
                 case "jobtitle" -> {
-                    employeeList = repository.findAllByJobTitleLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByJobTitleContainingIgnoreCase(pageable, searchText.get());
                 }
             }
         }
-        return employeeList;
+        return findAll(page, employeePerPage, sortBy);
     }
 
     // Добавить нового сотрудника

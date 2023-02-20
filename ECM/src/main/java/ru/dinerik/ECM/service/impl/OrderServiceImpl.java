@@ -2,6 +2,7 @@ package ru.dinerik.ECM.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,23 +48,31 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NoSuchElementException("Поручение с номером id: " + id + " не найдено"));
     }
 
-    // Поиск поручений по аттрибутам
+    // Поиск поручений по аттрибутам с пагинацией и сортировкой
     @Override
-    public List<Order> search(Optional<String> attribute, Optional<String> searchText) {
+    public List<Order> search(Optional<String> attribute,
+                              Optional<String> searchText,
+                              Optional<Integer> page,
+                              Optional<Integer> orderPerPage,
+                              Optional<String> sortBy) {
 
-        List<Order> orderList = new ArrayList<>();
+        Pageable pageable = null;
+
+        if(page.isPresent() && orderPerPage.isPresent())
+            pageable = sortBy.map(s -> PageRequest.of(page.get(), orderPerPage.get(), Sort.by(s)))
+                    .orElseGet(() -> PageRequest.of(page.get(), orderPerPage.get()));
 
         if (attribute.isPresent() && searchText.isPresent()) {
             switch (attribute.get().toLowerCase()) {
                 case "subject" -> {
-                    orderList = repository.findAllBySubjectLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllBySubjectContainingIgnoreCase(pageable, searchText.get());
                 }
                 case "text" -> {
-                    orderList = repository.findAllByTextLikeIgnoreCase("%" + searchText.get() + "%");
+                    return repository.findAllByTextContainingIgnoreCase(pageable, searchText.get());
                 }
             }
         }
-        return orderList;
+        return findAll(page, orderPerPage, sortBy);
     }
 
     // Добавить новое поручение

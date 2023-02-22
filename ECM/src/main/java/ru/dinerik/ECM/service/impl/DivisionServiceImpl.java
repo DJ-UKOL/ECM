@@ -12,6 +12,7 @@ import ru.dinerik.ECM.repository.DivisionRepository;
 import ru.dinerik.ECM.service.DivisionService;
 import ru.dinerik.ECM.service.EmployeeService;
 import ru.dinerik.ECM.service.OrganizationService;
+import ru.dinerik.ECM.service.impl.util.Sorting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +37,12 @@ public class DivisionServiceImpl implements DivisionService {
 
     // Получить список всех подразделений
     @Override
-    public List<Division> findAll(Optional<Integer> page, Optional<Integer> divisionPerPage, Optional<String> sortBy) {
-        if (page.isPresent() && divisionPerPage.isPresent()) {
-            return sortBy.map(s -> repository.findAll(PageRequest.of(page.get(), divisionPerPage.get(), Sort.by(s))).getContent()).orElseGet(() -> repository.findAll(PageRequest.of(page.get(), divisionPerPage.get())).getContent());
-        }
-        else {
-            return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
-        }
+    public List<Division> findAll(Optional<Integer> page,
+                                  Optional<Integer> divisionPerPage,
+                                  Optional<String> sortBy) {
+
+        Sorting<Division> sorting = new Sorting<>(repository);
+        return sorting.sortList(page, divisionPerPage, sortBy);
     }
 
     // Получить подразделение по id

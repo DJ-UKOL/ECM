@@ -6,10 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dinerik.ECM.domain.Order;
 import ru.dinerik.ECM.domain.Organization;
 import ru.dinerik.ECM.repository.OrganizationRepository;
 import ru.dinerik.ECM.service.EmployeeService;
 import ru.dinerik.ECM.service.OrganizationService;
+import ru.dinerik.ECM.service.impl.util.Sorting;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -34,15 +36,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     public List<Organization> findAll(Optional<Integer> page,
                                       Optional<Integer> organizationPerPage,
                                       Optional<String> sortBy) {
-        if (page.isPresent() && organizationPerPage.isPresent()) {
-            return sortBy.map(s -> repository
-                            .findAll(PageRequest.of(page.get(), organizationPerPage.get(), Sort.by(s)))
-                            .getContent())
-                    .orElseGet(() -> repository
-                            .findAll(PageRequest.of(page.get(), organizationPerPage.get()))
-                            .getContent());
-        }
-        return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
+
+        Sorting<Organization> sorting = new Sorting<>(repository);
+        return sorting.sortList(page, organizationPerPage, sortBy);
     }
 
     // Получить организацию по id

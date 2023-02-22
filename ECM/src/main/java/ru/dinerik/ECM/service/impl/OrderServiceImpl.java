@@ -6,9 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.dinerik.ECM.domain.Employee;
 import ru.dinerik.ECM.domain.Order;
 import ru.dinerik.ECM.repository.OrderRepository;
 import ru.dinerik.ECM.service.OrderService;
+import ru.dinerik.ECM.service.impl.util.Sorting;
 import ru.dinerik.ECM.statemachine.*;
 
 import java.util.ArrayList;
@@ -29,16 +31,12 @@ public class OrderServiceImpl implements OrderService {
 
     // Получить список всех поручений
     @Override
-    public List<Order> findAll(Optional<Integer> page, Optional<Integer> orderPerPage, Optional<String> sortBy) {
-        if (page.isPresent() && orderPerPage.isPresent()) {
-            return sortBy.map(s -> repository
-                            .findAll(PageRequest.of(page.get(), orderPerPage.get(), Sort.by(s)))
-                            .getContent())
-                    .orElseGet(() -> repository
-                            .findAll(PageRequest.of(page.get(), orderPerPage.get()))
-                            .getContent());
-        }
-        return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
+    public List<Order> findAll(Optional<Integer> page,
+                               Optional<Integer> orderPerPage,
+                               Optional<String> sortBy) {
+
+        Sorting<Order> sorting = new Sorting<>(repository);
+        return sorting.sortList(page, orderPerPage, sortBy);
     }
 
     // Получить поручение по id

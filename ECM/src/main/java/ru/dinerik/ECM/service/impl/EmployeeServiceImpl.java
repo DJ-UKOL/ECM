@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dinerik.ECM.domain.Employee;
 import ru.dinerik.ECM.repository.EmployeeRepository;
 import ru.dinerik.ECM.service.EmployeeService;
+import ru.dinerik.ECM.service.impl.util.Sorting;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -31,16 +32,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                                   Optional<Integer> employeePerPage,
                                   Optional<String> sortBy) {
 
-        return page.isPresent() && employeePerPage.isPresent() ?
-                sortBy.map(s -> repository
-                        .findAll(PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
-                        .getContent())
-                    .orElseGet(() -> repository
-                        .findAll(PageRequest.of(page.get(), employeePerPage.get()))
-                        .getContent()) :
-                sortBy.map(s -> repository
-                        .findAll(Sort.by(s)))
-                        .orElseGet(repository::findAll);
+        Sorting<Employee> sorting = new Sorting<>(repository);
+        return sorting.sortList(page, employeePerPage, sortBy);
     }
 
     // Получить сотрудника по id

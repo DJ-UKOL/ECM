@@ -28,17 +28,6 @@ public class DivisionControllerImpl implements DivisionController {
         this.mapper = mapper;
     }
 
-    // Получить список всех подразделений в формате DTO
-    @Override
-    @GetMapping("")
-    public List<DivisionForResponse> divisionTable(@RequestParam("page") Optional<Integer> page,
-                                                   @RequestParam("per_page") Optional<Integer> divisionPerPage,
-                                                   @RequestParam("sort_by") Optional<String> sortBy){
-        return service.findAll(page, divisionPerPage, sortBy).stream()
-                .map(mapper::responseToDivisionDto).collect(Collectors.toList());
-
-    }
-
     // Получить подразделение по id
     @Override
     @GetMapping("/{id}")
@@ -46,10 +35,10 @@ public class DivisionControllerImpl implements DivisionController {
         return mapper.responseToDivisionDto(service.findById(id));
     }
 
-    // Поиск подразделения по аттрибутам с пагинацией и сортировкой в формате DTO
+    // Получить список подразделений с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
     @Override
-    @GetMapping("/search")
-    public List<DivisionForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+    @GetMapping("")
+    public List<DivisionForResponse> divisionTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
                                             @RequestParam(value = "value", required = false) Optional<String> searchText,
                                             @RequestParam(value = "page", required = false) Optional<Integer> page,
                                             @RequestParam(value = "per_page", required = false) Optional<Integer> divisionPerPage,

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-// Класс получения списка всех объектов из БД
+// Класс получения списка, всех объектов из БД
 public class Sorting<K> {
 
     JpaRepository<K, Long> repository;

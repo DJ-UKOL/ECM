@@ -7,14 +7,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dinerik.ECM.domain.Division;
-import ru.dinerik.ECM.domain.Organization;
 import ru.dinerik.ECM.repository.DivisionRepository;
 import ru.dinerik.ECM.service.DivisionService;
 import ru.dinerik.ECM.service.EmployeeService;
 import ru.dinerik.ECM.service.OrganizationService;
 import ru.dinerik.ECM.service.impl.util.Sorting;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -35,16 +33,6 @@ public class DivisionServiceImpl implements DivisionService {
         this.organizationService = organizationService;
     }
 
-    // Получить список всех подразделений
-    @Override
-    public List<Division> findAll(Optional<Integer> page,
-                                  Optional<Integer> divisionPerPage,
-                                  Optional<String> sortBy) {
-
-        Sorting<Division> sorting = new Sorting<>(repository);
-        return sorting.sortList(page, divisionPerPage, sortBy);
-    }
-
     // Получить подразделение по id
     @Override
     public Division findById(Long id) {
@@ -52,7 +40,7 @@ public class DivisionServiceImpl implements DivisionService {
                 .orElseThrow(() -> new NoSuchElementException("Подразделение с номером id: " + id + " не найдено"));
     }
 
-    // Поиск подразделения по аттрибутам с пагинацией и сортировкой
+    // Получить список подразделений с поиском по аттрибутам с пагинацией и сортировкой
     @Override
     public List<Division> search(Optional<String> attribute,
                                  Optional<String> searchText,
@@ -60,14 +48,15 @@ public class DivisionServiceImpl implements DivisionService {
                                  Optional<Integer> divisionPerPage,
                                  Optional<String> sortBy) {
 
-        Pageable pageable = null;
-
-        if (page.isPresent() && divisionPerPage.isPresent()) {
-            pageable = sortBy.map(s -> PageRequest.of(page.get(), divisionPerPage.get(), Sort.by(s)))
-                    .orElseGet(() -> PageRequest.of(page.get(), divisionPerPage.get()));
-        }
-
         if (attribute.isPresent() && searchText.isPresent()) {
+
+            Pageable pageable = null;
+
+            if (page.isPresent() && divisionPerPage.isPresent()) {
+                pageable = sortBy.map(s -> PageRequest.of(page.get(), divisionPerPage.get(), Sort.by(s)))
+                        .orElseGet(() -> PageRequest.of(page.get(), divisionPerPage.get()));
+            }
+
             switch (attribute.get().toLowerCase()) {
                 case "fullname" -> {
                     return repository.findAllByFullNameContainingIgnoreCase(pageable, searchText.get());
@@ -77,7 +66,8 @@ public class DivisionServiceImpl implements DivisionService {
                 }
             }
         }
-        return findAll(page, divisionPerPage, sortBy);
+        Sorting<Division> sorting = new Sorting<>(repository);
+        return sorting.sortList(page, divisionPerPage, sortBy);
     }
 
     // Добавить новое подразделение

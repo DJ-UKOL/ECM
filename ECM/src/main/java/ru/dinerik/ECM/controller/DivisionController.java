@@ -14,23 +14,19 @@ import java.util.Optional;
 @RequestMapping("/division")
 public interface DivisionController {
 
-    // Получить список всех подразделений в формате DTO
-    // http://localhost:8080/division?page=1&per_page=3
-    // http://localhost:8080/division?sort_by=fullName
-    // http://localhost:8080/division?page=1&per_page=3&sort_by=fullName
-    @GetMapping("")
-    List<DivisionForResponse> divisionTable(@RequestParam("page") Optional<Integer> page,
-                                            @RequestParam("per_page") Optional<Integer> divisionPerPage,
-                                            @RequestParam("sort_by") Optional<String> sortBy);
-
     // Получить подразделение по id
     @GetMapping("/{id}")
     DivisionForResponse findById(@PathVariable("id") Long id);
 
-    // Поиск подразделения по аттрибутам с пагинацией и сортировкой в формате DTO
-    // http://localhost:8080/division/search?attr=fullName&value=Отдел
-    @GetMapping( "/search")
-    List<DivisionForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+    // Получить список подразделений с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
+    // attr - это аттрибут по которому нужно искать.
+    // value - это текст того что будем искать.
+    // page - это какую страницу показать.
+    // perpage - это сколько объектов отобразить на странице.
+    // sort_by - сортировка по аттрибуту.
+    // http://localhost:8080/division?attr=fullName&value=Отдел
+    @GetMapping( "")
+    List<DivisionForResponse> divisionTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
                                      @RequestParam(value = "value", required = false) Optional<String> searchText,
                                      @RequestParam(value = "page", required = false) Optional<Integer> page,
                                      @RequestParam(value = "per_page", required = false) Optional<Integer> divisionPerPage,

@@ -7,13 +7,10 @@ import java.util.Optional;
 // Интерфейс для работы с сервисом Поручение
 public interface OrderService {
 
-    // Получить список всех поручений
-    List<Order> findAll(Optional<Integer> page, Optional<Integer> orderPerPage, Optional<String> sortBy);
-
     // Получить поручение по id
     Order findById(Long id);
 
-    // Поиск поручений по аттрибутам с пагинацией и сортировкой
+    // Получить список поручений с поиском по аттрибутам с пагинацией и сортировкой
     List<Order> search(Optional<String> attribute,
                        Optional<String> searchText,
                        Optional<Integer> page,

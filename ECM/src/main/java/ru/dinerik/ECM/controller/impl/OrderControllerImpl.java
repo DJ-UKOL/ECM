@@ -26,16 +26,6 @@ public class OrderControllerImpl implements OrderController {
         this.mapper = mapper;
     }
 
-    // Получить список всех поручений в формате DTO
-    @Override
-    @GetMapping("")
-    public List<OrderForResponse> orderTable(@RequestParam("page") Optional<Integer> page,
-                                             @RequestParam("per_page") Optional<Integer> orderPerPage,
-                                             @RequestParam("sort_by") Optional<String> sortBy){
-        return service.findAll(page, orderPerPage, sortBy).stream()
-                .map(mapper::responseToOrderDto).collect(Collectors.toList());
-    }
-
     // Получить поручение по id
     @Override
     @GetMapping("/{id}")
@@ -43,10 +33,10 @@ public class OrderControllerImpl implements OrderController {
         return mapper.responseToOrderDto(service.findById(id));
     }
 
-    // Поиск поручений по аттрибутам с пагинацией и сортировкой в формате DTO
+    // Получить список поручений с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
     @Override
     @GetMapping("/search")
-    public List<OrderForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+    public List<OrderForResponse> orderTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
                                          @RequestParam(value = "value", required = false) Optional<String> searchText,
                                          @RequestParam(value = "page", required = false) Optional<Integer> page,
                                          @RequestParam(value = "per_page", required = false) Optional<Integer> orderPerPage,

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dinerik.ECM.domain.Employee;
 import ru.dinerik.ECM.repository.EmployeeRepository;
 import ru.dinerik.ECM.service.EmployeeService;
+import ru.dinerik.ECM.service.impl.util.Sorting;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,24 +26,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.repository = repository;
     }
 
-    // Получить список всех сотрудников с пагинацией и сортировкой
-    @Override
-    public List<Employee> findAll(Optional<Integer> page,
-                                  Optional<Integer> employeePerPage,
-                                  Optional<String> sortBy) {
-
-        return page.isPresent() && employeePerPage.isPresent() ?
-                sortBy.map(s -> repository
-                        .findAll(PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
-                        .getContent())
-                    .orElseGet(() -> repository
-                        .findAll(PageRequest.of(page.get(), employeePerPage.get()))
-                        .getContent()) :
-                sortBy.map(s -> repository
-                        .findAll(Sort.by(s)))
-                        .orElseGet(repository::findAll);
-    }
-
     // Получить сотрудника по id
     @Override
     public Employee findById(Long id) {
@@ -50,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .orElseThrow(() -> new NoSuchElementException("Сотрудник с номером id: " + id + " не найден"));
     }
 
-    // Поиск сотрудника по аттрибутам с пагинацией и сортировкой
+    // Получить список сотрудников с поиском по аттрибутам с пагинацией и сортировкой
     @Override
     public List<Employee> search(Optional<String> attribute,
                                  Optional<String> searchText,
@@ -58,13 +41,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                                  Optional<Integer> employeePerPage,
                                  Optional<String> sortBy) {
 
-        Pageable pageable = null;
-
-        if(page.isPresent() && employeePerPage.isPresent())
-            pageable = sortBy.map(s -> PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
-                .orElseGet(() -> PageRequest.of(page.get(), employeePerPage.get()));
-
         if (attribute.isPresent() && searchText.isPresent()) {
+
+            Pageable pageable = null;
+            if(page.isPresent() && employeePerPage.isPresent())
+                pageable = sortBy.map(s -> PageRequest.of(page.get(), employeePerPage.get(), Sort.by(s)))
+                        .orElseGet(() -> PageRequest.of(page.get(), employeePerPage.get()));
+
             switch (attribute.get().toLowerCase()) {
                 case "lastname" -> {
                     return repository.findAllByLastnameContainingIgnoreCase(pageable, searchText.get());
@@ -80,7 +63,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 }
             }
         }
-        return findAll(page, employeePerPage, sortBy);
+
+        Sorting<Employee> sorting = new Sorting<>(repository);
+        return sorting.sortList(page, employeePerPage, sortBy);
     }
 
     // Добавить нового сотрудника

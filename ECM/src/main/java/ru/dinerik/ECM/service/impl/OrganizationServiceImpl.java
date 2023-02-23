@@ -10,6 +10,7 @@ import ru.dinerik.ECM.domain.Organization;
 import ru.dinerik.ECM.repository.OrganizationRepository;
 import ru.dinerik.ECM.service.EmployeeService;
 import ru.dinerik.ECM.service.OrganizationService;
+import ru.dinerik.ECM.service.impl.util.Sorting;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,6 +19,7 @@ import java.util.Optional;
 // Бизнес логика
 @Service
 @Transactional(readOnly = true)
+
 public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository repository;
@@ -29,22 +31,6 @@ public class OrganizationServiceImpl implements OrganizationService {
         this.employeeService = employeeService;
     }
 
-    // Получить список всех организаций
-    @Override
-    public List<Organization> findAll(Optional<Integer> page,
-                                      Optional<Integer> organizationPerPage,
-                                      Optional<String> sortBy) {
-        if (page.isPresent() && organizationPerPage.isPresent()) {
-            return sortBy.map(s -> repository
-                            .findAll(PageRequest.of(page.get(), organizationPerPage.get(), Sort.by(s)))
-                            .getContent())
-                    .orElseGet(() -> repository
-                            .findAll(PageRequest.of(page.get(), organizationPerPage.get()))
-                            .getContent());
-        }
-        return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
-    }
-
     // Получить организацию по id
     @Override
     public Organization findById(Long id) {
@@ -52,7 +38,7 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .orElseThrow(() -> new NoSuchElementException("Организация с номером id: " + id + " не найдена"));
     }
 
-    // Поиск организации по аттрибутам с пагинацией и сортировкой
+    // Получить список организаций с поиском по аттрибутам с пагинацией и сортировкой
     @Override
     public List<Organization> search(Optional<String> attribute,
                                      Optional<String> searchText,
@@ -60,13 +46,14 @@ public class OrganizationServiceImpl implements OrganizationService {
                                      Optional<Integer> organizationPerPage,
                                      Optional<String> sortBy) {
 
-        Pageable pageable = null;
-
-        if(page.isPresent() && organizationPerPage.isPresent())
-            pageable = sortBy.map(s -> PageRequest.of(page.get(), organizationPerPage.get(), Sort.by(s)))
-                    .orElseGet(() -> PageRequest.of(page.get(), organizationPerPage.get()));
-
         if (attribute.isPresent() && searchText.isPresent()) {
+
+            Pageable pageable = null;
+
+            if(page.isPresent() && organizationPerPage.isPresent())
+                pageable = sortBy.map(s -> PageRequest.of(page.get(), organizationPerPage.get(), Sort.by(s)))
+                        .orElseGet(() -> PageRequest.of(page.get(), organizationPerPage.get()));
+
             switch (attribute.get().toLowerCase()) {
                 case "fullname" -> {
                     return repository.findAllByFullNameContainingIgnoreCase(pageable, searchText.get());
@@ -79,7 +66,8 @@ public class OrganizationServiceImpl implements OrganizationService {
                 }
             }
         }
-        return findAll(page, organizationPerPage, sortBy);
+        Sorting<Organization> sorting = new Sorting<>(repository);
+        return sorting.sortList(page, organizationPerPage, sortBy);
     }
 
     // Добавить новую организацию

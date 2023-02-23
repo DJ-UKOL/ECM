@@ -12,27 +12,24 @@ import java.util.Optional;
 @RequestMapping("/organization")
 public interface OrganizationController {
 
-    // Получить список всех организаций в формате DTO
-    // http://localhost:8080/organization?page=1&per_page=3
-    // http://localhost:8080/organization?sort_by=fullName
-    // http://localhost:8080/organization?page=1&per_page=3&sort_by=fullName
-    @GetMapping("")
-    List<OrganizationForResponse> organizationTable(@RequestParam("page") Optional<Integer> page,
-                                                    @RequestParam("per_page") Optional<Integer> organizationPerPage,
-                                                    @RequestParam("sort_by") Optional<String> sortBy);
-
     // Получить организацию по id
     @GetMapping("/{id}")
     OrganizationForResponse findById(@PathVariable("id") Long id);
 
-    // Поиск организации по аттрибутам с пагинацией и сортировкой в формате DTO
-    // http://localhost:8080/organization/search?attr=fullName&value=Эвер
-    @GetMapping( "/search")
-    List<OrganizationForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                         @RequestParam(value = "value", required = false) Optional<String> searchText,
-                                         @RequestParam(value = "page", required = false) Optional<Integer> page,
-                                         @RequestParam(value = "per_page", required = false) Optional<Integer> organizationPerPage,
-                                         @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
+    // Получить список организаций с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
+    // attr - это аттрибут по которому нужно искать.
+    // value - это текст того что будем искать.
+    // page - это какую страницу показать.
+    // perpage - это сколько объектов отобразить на странице.
+    // sort_by - сортировка по аттрибуту.
+    // http://localhost:8080/organization?attr=fullName&value=Эвер
+    @GetMapping( "")
+    List<OrganizationForResponse> organizationTable(
+            @RequestParam(value = "attr", required = false) Optional<String> attribute,
+            @RequestParam(value = "value", required = false) Optional<String> searchText,
+            @RequestParam(value = "page", required = false) Optional<Integer> page,
+            @RequestParam(value = "per_page", required = false) Optional<Integer> organizationPerPage,
+            @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
 
     // Добавить новую организацию
     @PostMapping

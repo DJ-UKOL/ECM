@@ -12,23 +12,22 @@ import java.util.Optional;
 @RequestMapping("/employee")
 public interface EmployeeController {
 
-    // Получить список всех сотрудников с пагинацией и сортировкой в формате DTO
-    // http://localhost:8080/employee?page=1&per_page=3
-    // http://localhost:8080/employee?sort_by=lastname
-    // http://localhost:8080/employee?page=1&per_page=3&sort_by=lastname
-    @GetMapping("")
-    List<EmployeeForResponse> employeeTable(@RequestParam("page") Optional<Integer> page,
-                                            @RequestParam("per_page") Optional<Integer> employeePerPage,
-                                            @RequestParam("sort_by") Optional<String> sortBy);
-
     // Получить сотрудника по id
     @GetMapping("/{id}")
     EmployeeForResponse findById(@PathVariable("id") Long id);
 
-    // Поиск сотрудников по аттрибутам с пагинацией и сортировкой в формате DTO
-    // http://localhost:8080/employee/search?attr=lastname&value=Эрик&page=1&per_page=3&sort_by=lastname
-    @GetMapping( "/search")
-    List<EmployeeForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+    // Получить список сотрудников с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
+    // attr - это аттрибут по которому нужно искать.
+    // value - это текст того что будем искать.
+    // page - это какую страницу показать.
+    // perpage - это сколько объектов отобразить на странице.
+    // sort_by - сортировка по аттрибуту.
+    // http://localhost:8080/employee?attr=firstname&value=75&page=0&per_page=3&sort_by=lastname
+    // http://localhost:8080/employee?page=0&per_page=3&sort_by=lastname
+    // http://localhost:8080/employee?attr=firstname&value=75
+    // http://localhost:8080/employee?attr=firstname&value=75&sort_by=firsName
+    @GetMapping( "")
+    List<EmployeeForResponse> employeeTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
                                      @RequestParam(value = "value", required = false) Optional<String> searchText,
                                      @RequestParam(value = "page", required = false) Optional<Integer> page,
                                      @RequestParam(value = "per_page", required = false) Optional<Integer> employeePerPage,

@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.dinerik.ECM.domain.Order;
 import ru.dinerik.ECM.repository.OrderRepository;
 import ru.dinerik.ECM.service.OrderService;
+import ru.dinerik.ECM.service.impl.util.Sorting;
 import ru.dinerik.ECM.statemachine.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -27,19 +27,6 @@ public class OrderServiceImpl implements OrderService {
         this.repository = repository;
     }
 
-    // Получить список всех поручений
-    @Override
-    public List<Order> findAll(Optional<Integer> page, Optional<Integer> orderPerPage, Optional<String> sortBy) {
-        if (page.isPresent() && orderPerPage.isPresent()) {
-            return sortBy.map(s -> repository
-                            .findAll(PageRequest.of(page.get(), orderPerPage.get(), Sort.by(s)))
-                            .getContent())
-                    .orElseGet(() -> repository
-                            .findAll(PageRequest.of(page.get(), orderPerPage.get()))
-                            .getContent());
-        }
-        return sortBy.map(s -> repository.findAll(Sort.by(s))).orElseGet(repository::findAll);
-    }
 
     // Получить поручение по id
     @Override
@@ -48,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new NoSuchElementException("Поручение с номером id: " + id + " не найдено"));
     }
 
-    // Поиск поручений по аттрибутам с пагинацией и сортировкой
+    // Получить список поручений с поиском по аттрибутам с пагинацией и сортировкой
     @Override
     public List<Order> search(Optional<String> attribute,
                               Optional<String> searchText,
@@ -56,13 +43,14 @@ public class OrderServiceImpl implements OrderService {
                               Optional<Integer> orderPerPage,
                               Optional<String> sortBy) {
 
-        Pageable pageable = null;
-
-        if(page.isPresent() && orderPerPage.isPresent())
-            pageable = sortBy.map(s -> PageRequest.of(page.get(), orderPerPage.get(), Sort.by(s)))
-                    .orElseGet(() -> PageRequest.of(page.get(), orderPerPage.get()));
-
         if (attribute.isPresent() && searchText.isPresent()) {
+
+            Pageable pageable = null;
+
+            if(page.isPresent() && orderPerPage.isPresent())
+                pageable = sortBy.map(s -> PageRequest.of(page.get(), orderPerPage.get(), Sort.by(s)))
+                        .orElseGet(() -> PageRequest.of(page.get(), orderPerPage.get()));
+
             switch (attribute.get().toLowerCase()) {
                 case "subject" -> {
                     return repository.findAllBySubjectContainingIgnoreCase(pageable, searchText.get());
@@ -72,7 +60,8 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
-        return findAll(page, orderPerPage, sortBy);
+        Sorting<Order> sorting = new Sorting<>(repository);
+        return sorting.sortList(page, orderPerPage, sortBy);
     }
 
     // Добавить новое поручение

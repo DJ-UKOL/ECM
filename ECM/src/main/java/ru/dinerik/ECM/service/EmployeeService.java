@@ -8,13 +8,10 @@ import java.util.Optional;
 // Интерфейс для работы с сервисом Сотрудник
 public interface EmployeeService {
 
-    // Получить список всех сотрудников с пагинацией и сортировкой
-    List<Employee> findAll(Optional<Integer> page, Optional<Integer> employeePerPage, Optional<String> sortBy);
-
     // Получить сотрудника по id
     Employee findById(Long id);
 
-    // Поиск сотрудника по аттрибутам с пагинацией и сортировкой
+    // Получить список сотрудников с поиском по аттрибутам с пагинацией и сортировкой
     List<Employee> search(Optional<String> attribute,
                           Optional<String> searchText,
                           Optional<Integer> page,

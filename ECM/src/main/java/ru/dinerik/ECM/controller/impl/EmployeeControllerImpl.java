@@ -26,18 +26,6 @@ public class EmployeeControllerImpl implements EmployeeController {
         this.mapper = mapper;
     }
 
-    // Получить список всех сотрудников с пагинацией и сортировкой в формате DTO
-    @Override
-    @GetMapping("")
-    public List<EmployeeForResponse> employeeTable(
-                              @RequestParam("page") Optional<Integer> page,
-                              @RequestParam("per_page") Optional<Integer> employeePerPage,
-                              @RequestParam("sort_by") Optional<String> sortBy){
-
-        return service.findAll(page, employeePerPage, sortBy).stream()
-                .map(mapper::responseToEmployeeDto).collect(Collectors.toList());
-    }
-
     // Получить сотрудника по id
     @Override
     @GetMapping("/{id}")
@@ -45,10 +33,10 @@ public class EmployeeControllerImpl implements EmployeeController {
         return mapper.responseToEmployeeDto(service.findById(id));
     }
 
-    // Поиск сотрудников по аттрибутам с пагинацией и сортировкой в формате DTO
+    // Получить список сотрудников с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
     @Override
-    @GetMapping("/search")
-    public List<EmployeeForResponse> search(@RequestParam(value = "attr", required = false) Optional<String> attribute,
+    @GetMapping("")
+    public List<EmployeeForResponse> employeeTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
                                             @RequestParam(value = "value", required = false) Optional<String> searchText,
                                             @RequestParam(value = "page", required = false) Optional<Integer> page,
                                             @RequestParam(value = "per_page", required = false) Optional<Integer> employeePerPage,

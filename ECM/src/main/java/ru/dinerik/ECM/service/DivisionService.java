@@ -1,7 +1,6 @@
 package ru.dinerik.ECM.service;
 
 import ru.dinerik.ECM.domain.Division;
-import ru.dinerik.ECM.domain.Organization;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,13 +8,10 @@ import java.util.Optional;
 // Интерфейс для работы с сервисом Подразделение
 public interface DivisionService {
 
-    // Получить список всех подразделений
-   List<Division> findAll(Optional<Integer> page, Optional<Integer> divisionPerPage, Optional<String> sortBy);
-
     // Получить подразделение по id
     Division findById(Long id);
 
-    // Поиск подразделения по аттрибутам с пагинацией и сортировкой
+    // Получить список подразделений с поиском по аттрибутам с пагинацией и сортировкой
     List<Division> search(Optional<String> attribute,
                           Optional<String> searchText,
                           Optional<Integer> page,

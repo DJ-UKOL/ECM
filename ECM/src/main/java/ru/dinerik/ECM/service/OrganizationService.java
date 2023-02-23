@@ -8,13 +8,10 @@ import java.util.Optional;
 // Интерфейс для работы с сервисом Организация
 public interface OrganizationService {
 
-    // Получить список всех организаций
-    List<Organization> findAll(Optional<Integer> page, Optional<Integer> organizationPerPage, Optional<String> sortBy);
-
     // Получить организацию по id
     Organization findById(Long id);
 
-    // Поиск организации по аттрибутам с пагинацией и сортировкой
+    // Получить список организаций с поиском по аттрибутам с пагинацией и сортировкой
     List<Organization> search(Optional<String> attribute,
                               Optional<String> searchText,
                               Optional<Integer> page,

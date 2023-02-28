@@ -1,5 +1,8 @@
 package ru.dinerik.ECM.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.dto.division.DivisionForRequest;
@@ -12,45 +15,87 @@ import java.util.Optional;
 
 // Интерфейс для работы с контроллером Подразделение
 @RequestMapping("/division")
+@Tag(name="Подразделения", description="Управление подразделениями")
 public interface DivisionController {
 
-    // Получить подразделение по id
+    @Operation(
+            summary = "Получить подразделение",
+            description = "Позволяет получить подразделение по id"
+    )
     @GetMapping("/{id}")
-    DivisionForResponse findById(@PathVariable("id") Long id);
+    DivisionForResponse findById(@PathVariable("id")
+                                 @Parameter(description = "Идентификатор подразделения")
+                                 Long id);
 
-    // Получить список подразделений с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
-    // attr - это аттрибут по которому нужно искать.
-    // value - это текст того что будем искать.
-    // page - это какую страницу показать.
-    // perpage - это сколько объектов отобразить на странице.
-    // sort_by - сортировка по аттрибуту.
-    // http://localhost:8080/division?attr=fullName&value=Отдел
+    @Operation(
+            summary = "Получить список подразделений",
+            description = "Позволяет получить список подразделений с поиском по аттрибутам, с пагинацией и сортировкой"
+    )
     @GetMapping( "")
-    List<DivisionForResponse> divisionTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                     @RequestParam(value = "value", required = false) Optional<String> searchText,
-                                     @RequestParam(value = "page", required = false) Optional<Integer> page,
-                                     @RequestParam(value = "per_page", required = false) Optional<Integer> divisionPerPage,
-                                     @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
+    List<DivisionForResponse> divisionTable(
+            @RequestParam(value = "attr", required = false)
+            @Parameter(description = "Аттрибут для поиска")
+            Optional<String> attribute,
+            @RequestParam(value = "value", required = false)
+            @Parameter(description = "Фраза для поиска")
+            Optional<String> searchText,
+            @RequestParam(value = "page", required = false)
+            @Parameter(description = "Номер страницы для отображения")
+            Optional<Integer> page,
+            @RequestParam(value = "per_page", required = false)
+            @Parameter(description = "Количество объектов на странице")
+            Optional<Integer> divisionPerPage,
+            @RequestParam(value = "sort_by", required = false)
+            @Parameter(description = "Аттрибут для сортировки")
+            Optional<String> sortBy);
 
-    // Добавить новое подразделение
+    @Operation(
+            summary = "Добавить новое подразделение",
+            description = "Позволяет добавить новое подразделение"
+    )
     @PostMapping
-    List<DivisionForResponse> createDivision(@RequestBody DivisionForRequest request);
+    List<DivisionForResponse> createDivision(
+            @RequestBody DivisionForRequest request);
 
-    // Назначение управляющего в подразделение
+    @Operation(
+            summary = "Назначить управляющего в подразделение",
+            description = "Позволяет назначить управляющего в подразделение"
+    )
     @PatchMapping("/{id}/manager")
-    DivisionForResponse assignManagerInDivision(@PathVariable Long id, @RequestBody EmployeeForResponse manager);
+    DivisionForResponse assignManagerInDivision(
+            @PathVariable
+            @Parameter(description = "Идентификатор подразделения") Long id,
+            @RequestBody EmployeeForResponse manager);
 
-    // Прикрепить подразделение к организации
+    @Operation(
+            summary = "Прикрепить подразделение к организации",
+            description = "Позволяет прикрепить подразделение к организации"
+    )
     @PatchMapping("/{id}/organization")
-    DivisionForResponse assignOrganizationInDivision(@PathVariable Long id, @RequestBody OrganizationForResponse organization);
+    DivisionForResponse assignOrganizationInDivision(
+            @PathVariable
+            @Parameter(description = "Идентификатор подразделения")
+            Long id,
+            @RequestBody OrganizationForResponse organization);
 
-    // Редактировать подразделение
+    @Operation(
+            summary = "Редактировать подразделение",
+            description = "Позволяет отредактировать подразделение"
+    )
     @PutMapping("/{id}")
-    List<DivisionForResponse> updateDivision(@PathVariable Long id,
-                                                            @Valid @RequestBody DivisionForRequest request);
+    List<DivisionForResponse> updateDivision(
+            @PathVariable
+            @Parameter(description = "Идентификатор подразделения")
+            Long id,
+            @Valid @RequestBody DivisionForRequest request);
 
-    // Удалить подразделение по id
+    @Operation(
+            summary = "Удалить подразделение",
+            description = "Позволяет удалить подразделение"
+    )
     @DeleteMapping("/{id}")
-    List<DivisionForResponse> deleteDivision(@PathVariable Long id);
-
+    List<DivisionForResponse> deleteDivision(
+            @PathVariable
+            @Parameter(description = "Идентификатор подразделения")
+            Long id);
 }

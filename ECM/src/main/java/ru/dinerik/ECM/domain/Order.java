@@ -3,6 +3,7 @@ package ru.dinerik.ECM.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.dinerik.ECM.statemachine.*;
@@ -14,6 +15,7 @@ import java.util.Set;
 // Поручение
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -27,9 +29,9 @@ public class Order {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime timeExecution;            // Срок исполнения
     @NotNull
-    private Boolean controlSign;            // Признак контрольности
+    private Boolean controlSign;                    // Признак контрольности
     @NotNull
-    private Boolean performanceSign;        // Признак исполнения
+    private Boolean performanceSign;                // Признак исполнения
     @NotBlank(message = "Поле Текст поручения должно быть заполнено!")
     @Column
     private String text;                            // Текст поручения
@@ -41,12 +43,6 @@ public class Order {
     // Отношение многие ко многим (у одного поручения много исполнителей, и у одного исполнителя много поручений)
     @ManyToMany(mappedBy = "orderExecutors", fetch = FetchType.EAGER)
     private Set<Employee> executors = new HashSet<>();           // Исполнители поручения
-
     @Enumerated
     private LeaveOrderState orderState;
-
-    public Order(String subject, String text) {
-        this.subject = subject;
-        this.text = text;
-    }
 }

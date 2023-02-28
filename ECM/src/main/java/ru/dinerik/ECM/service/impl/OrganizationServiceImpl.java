@@ -1,6 +1,6 @@
 package ru.dinerik.ECM.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,17 +19,11 @@ import java.util.Optional;
 // Бизнес логика
 @Service
 @Transactional(readOnly = true)
-
+@RequiredArgsConstructor
 public class OrganizationServiceImpl implements OrganizationService {
 
     private final OrganizationRepository repository;
     private final EmployeeService employeeService;
-
-    @Autowired
-    public OrganizationServiceImpl(OrganizationRepository repository, EmployeeService employeeService) {
-        this.repository = repository;
-        this.employeeService = employeeService;
-    }
 
     // Получить организацию по id
     @Override

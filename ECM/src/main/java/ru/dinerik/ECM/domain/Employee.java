@@ -3,6 +3,7 @@ package ru.dinerik.ECM.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 // Сотрудник
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "employees")
 public class Employee {
@@ -48,11 +50,4 @@ public class Employee {
     // Отношение многие ко многим (у одного поручения много исполнителей, и у одного исполнителя много поручений)
     @ManyToMany
     private Set<Order> orderExecutors;
-
-    public Employee(String lastname, String firstname, String patronymic, String jobTitle) {
-        this.lastname = lastname;
-        this.firstname = firstname;
-        this.patronymic = patronymic;
-        this.jobTitle = jobTitle;
-    }
 }

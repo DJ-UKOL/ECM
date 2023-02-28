@@ -1,7 +1,7 @@
 package ru.dinerik.ECM.controller.impl;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.DivisionController;
 import ru.dinerik.ECM.dto.division.DivisionForRequest;
@@ -17,16 +17,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/division")
+@RequiredArgsConstructor
 public class DivisionControllerImpl implements DivisionController {
 
     private final DivisionService service;
     private final DivisionMapper mapper;
-
-    @Autowired
-    public DivisionControllerImpl(DivisionService service, DivisionMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
 
     // Получить подразделение по id
     @Override

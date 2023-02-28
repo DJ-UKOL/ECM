@@ -1,6 +1,6 @@
 package ru.dinerik.ECM.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,14 +17,10 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository repository;
-
-    @Autowired
-    public EmployeeServiceImpl(EmployeeRepository repository) {
-        this.repository = repository;
-    }
 
     // Получить сотрудника по id
     @Override

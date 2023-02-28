@@ -1,7 +1,7 @@
 package ru.dinerik.ECM.controller.impl;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.EmployeeController;
 import ru.dinerik.ECM.dto.employee.EmployeeForRequest;
@@ -15,16 +15,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employee")
+@RequiredArgsConstructor
 public class EmployeeControllerImpl implements EmployeeController {
 
     private final EmployeeService service;
     private final EmployeeMapper mapper;
-
-    @Autowired
-    public EmployeeControllerImpl(EmployeeService service, EmployeeMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
 
     // Получить сотрудника по id
     @Override

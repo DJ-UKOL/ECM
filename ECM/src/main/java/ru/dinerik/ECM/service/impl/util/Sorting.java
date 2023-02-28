@@ -1,5 +1,6 @@
 package ru.dinerik.ECM.service.impl.util;
 
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,13 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 // Класс получения списка, всех объектов из БД
+@AllArgsConstructor
 public class Sorting<K> {
 
-    JpaRepository<K, Long> repository;
-
-    public Sorting(JpaRepository<K, Long> repository) {
-        this.repository = repository;
-    }
+    private JpaRepository<K, Long> repository;
 
     public List<K> sortList(Optional<Integer> page,
                                  Optional<Integer> objectPerPage,

@@ -1,3 +1,4 @@
+/*
 package ru.dinerik.ECM.mapper.impl;
 
 import org.springframework.stereotype.Component;
@@ -36,4 +37,4 @@ public class DivisionMapperImpl implements DivisionMapper {
         }
         return divisionForResponse;
     }
-}
+}*/

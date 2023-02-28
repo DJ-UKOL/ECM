@@ -2,12 +2,14 @@ package ru.dinerik.ECM.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 // Подразделение
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "divisions")
 public class Division {
@@ -29,8 +31,4 @@ public class Division {
     @ManyToOne
     private Organization organization;            // Организация
 
-    public Division(String fullName, String contactDetails) {
-        this.fullName = fullName;
-        this.contactDetails = contactDetails;
-    }
 }

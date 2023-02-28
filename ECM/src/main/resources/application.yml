@@ -1,9 +1,15 @@
 logging:
   level:
+    ru:
+      dinerik:
+        ECM: info
     org:
       hibernate:
-        type: TRACE
+        type: error
+    root: error
 spring:
+  main:
+    banner-mode: off
   datasource:
     url: jdbc:postgresql://localhost:5433/ECMdb
     username: postgres
@@ -19,3 +25,6 @@ spring:
       true
 server:
   port: 8080
+  error:
+    include-binding-errors: always
+    include-message: always

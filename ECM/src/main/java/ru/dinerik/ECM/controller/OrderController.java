@@ -1,5 +1,8 @@
 package ru.dinerik.ECM.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.dto.order.OrderForRequest;
@@ -10,47 +13,88 @@ import java.util.Optional;
 
 // Интерфейс для работы с контроллером Поручение
 @RequestMapping("/order")
+@Tag(name="Поручения", description="Управление поручениями")
 public interface OrderController {
 
-    // Получить поручение по id
+    @Operation(
+            summary = "Получить поручение",
+            description = "Позволяет получить поручение по id"
+    )
     @GetMapping("/{id}")
-    OrderForResponse findById(@PathVariable("id") Long id);
+    OrderForResponse findById(
+            @PathVariable("id")
+            @Parameter(description = "Идентификатор поручения")
+            Long id);
 
-    // Получить список поручений с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
-    // attr - это аттрибут по которому нужно искать.
-    // value - это текст того что будем искать.
-    // page - это какую страницу показать.
-    // perpage - это сколько объектов отобразить на странице.
-    // sort_by - сортировка по аттрибуту.
-    // http://localhost:8080/order?attr=subject&value=налог
+    @Operation(
+            summary = "Получить список поручений",
+            description = "Позволяет получить список поручений с поиском по аттрибутам, с пагинацией и сортировкой"
+    )
     @GetMapping( "")
-    List<OrderForResponse> orderTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                  @RequestParam(value = "value", required = false) Optional<String> searchText,
-                                  @RequestParam(value = "page", required = false) Optional<Integer> page,
-                                  @RequestParam(value = "per_page", required = false) Optional<Integer> orderPerPage,
-                                  @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
+    List<OrderForResponse> orderTable(
+            @RequestParam(value = "attr", required = false)
+            @Parameter(description = "Аттрибут для поиска")
+            Optional<String> attribute,
+            @RequestParam(value = "value", required = false)
+            @Parameter(description = "Фраза для поиска")
+            Optional<String> searchText,
+            @RequestParam(value = "page", required = false)
+            @Parameter(description = "Номер страницы для отображения")
+            Optional<Integer> page,
+            @RequestParam(value = "per_page", required = false)
+            @Parameter(description = "Количество объектов на странице")
+            Optional<Integer> orderPerPage,
+            @RequestParam(value = "sort_by", required = false)
+            @Parameter(description = "Аттрибут для сортировки")
+            Optional<String> sortBy);
 
-    // Добавить новое поручение
+    @Operation(
+            summary = "Добавить новое поручение",
+            description = "Позволяет добавить новое поручение"
+    )
     @PostMapping
     List<OrderForResponse> createOrder(@RequestBody OrderForRequest request);
 
-    // Установить статус исполнено
+    @Operation(
+            summary = "Установить статус исполнено",
+            description = "Позволяет установить статус исполнено"
+    )
     @PatchMapping("/{id}/performance")
-    OrderForResponse setPerformanceSign(@PathVariable Long id,
-                                        @RequestBody OrderForRequest request);
+    OrderForResponse setPerformanceSign(
+            @PathVariable
+            @Parameter(description = "Идентификатор поручения")
+            Long id,
+            @RequestBody OrderForRequest request);
 
-    // Установить статус контроль
+    @Operation(
+            summary = "Установить статус контроль",
+            description = "Позволяет установить статус контроль"
+    )
     @PatchMapping("/{id}/control")
-    OrderForResponse setControlSign(@PathVariable Long id,
-                                        @RequestBody OrderForRequest request);
+    OrderForResponse setControlSign(
+            @PathVariable
+            @Parameter(description = "Идентификатор поручения")
+            Long id,
+            @RequestBody OrderForRequest request);
 
-    // Редактировать поручение
+    @Operation(
+            summary = "Редактировать поручение",
+            description = "Позволяет отредактировать поручение"
+    )
     @PutMapping("/{id}")
-    List<OrderForResponse> updateOrder(@PathVariable Long id,
-                                                    @Valid @RequestBody OrderForRequest request);
+    List<OrderForResponse> updateOrder(
+            @PathVariable
+            @Parameter(description = "Идентификатор поручения")
+            Long id,
+            @Valid @RequestBody OrderForRequest request);
 
-    // Удалить поручение по id
+    @Operation(
+            summary = "Удалить поручение",
+            description = "Позволяет удалить поручение"
+    )
     @DeleteMapping("/{id}")
-    List<OrderForResponse> deleteOrder(@PathVariable Long id);
-
+    List<OrderForResponse> deleteOrder(
+            @PathVariable
+            @Parameter(description = "Идентификатор поручения")
+            Long id);
 }

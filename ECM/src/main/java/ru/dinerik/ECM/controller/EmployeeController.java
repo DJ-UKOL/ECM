@@ -1,5 +1,8 @@
 package ru.dinerik.ECM.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.dto.employee.EmployeeForRequest;
@@ -10,40 +13,67 @@ import java.util.Optional;
 
 // Интерфейс для работы с контроллером Сотрудник
 @RequestMapping("/employee")
+@Tag(name="Сотрудники", description="Управление сотрудниками")
 public interface EmployeeController {
 
-    // Получить сотрудника по id
+    @Operation(
+            summary = "Получить сотрудника",
+            description = "Позволяет получить сотрудника по id"
+    )
     @GetMapping("/{id}")
-    EmployeeForResponse findById(@PathVariable("id") Long id);
+    EmployeeForResponse findById(
+            @PathVariable("id")
+            @Parameter(description = "Идентификатор сотрудника")
+            Long id);
 
-    // Получить список сотрудников с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
-    // attr - это аттрибут по которому нужно искать.
-    // value - это текст того что будем искать.
-    // page - это какую страницу показать.
-    // perpage - это сколько объектов отобразить на странице.
-    // sort_by - сортировка по аттрибуту.
-    // http://localhost:8080/employee?attr=firstname&value=75&page=0&per_page=3&sort_by=lastname
-    // http://localhost:8080/employee?page=0&per_page=3&sort_by=lastname
-    // http://localhost:8080/employee?attr=firstname&value=75
-    // http://localhost:8080/employee?attr=firstname&value=75&sort_by=firsName
+    @Operation(
+            summary = "Получить список сотрудников",
+            description = "Позволяет получить список сотрудников с поиском по аттрибутам, с пагинацией и сортировкой"
+    )
     @GetMapping( "")
-    List<EmployeeForResponse> employeeTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
-                                     @RequestParam(value = "value", required = false) Optional<String> searchText,
-                                     @RequestParam(value = "page", required = false) Optional<Integer> page,
-                                     @RequestParam(value = "per_page", required = false) Optional<Integer> employeePerPage,
-                                     @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
+    List<EmployeeForResponse> employeeTable(
+            @RequestParam(value = "attr", required = false)
+            @Parameter(description = "Аттрибут для поиска")
+            Optional<String> attribute,
+            @RequestParam(value = "value", required = false)
+            @Parameter(description = "Фраза для поиска")
+            Optional<String> searchText,
+            @RequestParam(value = "page", required = false)
+            @Parameter(description = "Номер страницы для отображения")
+            Optional<Integer> page,
+            @RequestParam(value = "per_page", required = false)
+            @Parameter(description = "Количество объектов на странице")
+            Optional<Integer> employeePerPage,
+            @RequestParam(value = "sort_by", required = false)
+            @Parameter(description = "Аттрибут для сортировки")
+            Optional<String> sortBy);
 
-    // Добавить нового сотрудника
+    @Operation(
+            summary = "Добавить нового сотрудника",
+            description = "Позволяет добавить нового сотрудника"
+    )
     @PostMapping
     List<EmployeeForResponse> createEmployee(@RequestBody EmployeeForRequest request);
 
-    // Редактировать сотрудника
+    @Operation(
+            summary = "Редактировать сотрудника",
+            description = "Позволяет отредактировать сотрудника"
+    )
     @PutMapping("/{id}")
-    List<EmployeeForResponse> updateEmployee(@PathVariable Long id,
-                                                    @Valid @RequestBody EmployeeForRequest request);
+    List<EmployeeForResponse> updateEmployee(
+            @PathVariable
+            @Parameter(description = "Идентификатор сотрудника")
+            Long id,
+            @Valid @RequestBody EmployeeForRequest request);
 
-    // Удалить сотрудника по id
+    @Operation(
+            summary = "Удалить сотрудника",
+            description = "Позволяет удалить сотрудника"
+    )
     @DeleteMapping("/{id}")
-    List<EmployeeForResponse> deleteEmployee(@PathVariable Long id);
+    List<EmployeeForResponse> deleteEmployee(
+            @PathVariable
+            @Parameter(description = "Идентификатор сотрудника")
+            Long id);
 
 }

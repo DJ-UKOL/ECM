@@ -1,22 +1,27 @@
 package ru.dinerik.ECM.dto.employee;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// DTO для запросов (приема)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Сущность сотрудника для запросов (приема)")
 public class EmployeeForRequest {
     @NotBlank(message = "Поле Фамилия должно быть заполнено!")
-    private String lastname;        // Фамилия
+    @Schema(description = "Фамилия сотрудника")
+    private String lastname;
     @NotBlank(message = "Поле Имя должно быть заполнено!")
-    private String firstname;       // Имя
+    @Schema(description = "Имя сотрудника")
+    private String firstname;
     @NotNull
-    private String patronymic;      // Отчество
+    @Schema(description = "Отчество сотрудника")
+    private String patronymic;
     @NotBlank(message = "Поле Должность должно быть заполнено!")
-    private String jobTitle;        // Должность
+    @Schema(description = "Должность сотрудника")
+    private String jobTitle;
 }

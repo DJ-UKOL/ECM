@@ -1,5 +1,8 @@
 package ru.dinerik.ECM.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.dto.employee.EmployeeForResponse;
@@ -10,42 +13,77 @@ import java.util.Optional;
 
 // Интерфейс для работы с контроллером Организация
 @RequestMapping("/organization")
+@Tag(name="Организации", description="Управление организациями")
 public interface OrganizationController {
 
-    // Получить организацию по id
+    @Operation(
+            summary = "Получить организацию",
+            description = "Позволяет получить организацию по id"
+    )
     @GetMapping("/{id}")
-    OrganizationForResponse findById(@PathVariable("id") Long id);
+    OrganizationForResponse findById(
+            @PathVariable("id")
+            @Parameter(description = "Идентификатор организации")
+            Long id);
 
-    // Получить список организаций с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
-    // attr - это аттрибут по которому нужно искать.
-    // value - это текст того что будем искать.
-    // page - это какую страницу показать.
-    // perpage - это сколько объектов отобразить на странице.
-    // sort_by - сортировка по аттрибуту.
-    // http://localhost:8080/organization?attr=fullName&value=Эвер
+    @Operation(
+            summary = "Получить список организаций",
+            description = "Позволяет получить список организаций с поиском по аттрибутам, с пагинацией и сортировкой"
+    )
     @GetMapping( "")
     List<OrganizationForResponse> organizationTable(
-            @RequestParam(value = "attr", required = false) Optional<String> attribute,
-            @RequestParam(value = "value", required = false) Optional<String> searchText,
-            @RequestParam(value = "page", required = false) Optional<Integer> page,
-            @RequestParam(value = "per_page", required = false) Optional<Integer> organizationPerPage,
-            @RequestParam(value = "sort_by", required = false) Optional<String> sortBy);
+            @RequestParam(value = "attr", required = false)
+            @Parameter(description = "Аттрибут для поиска")
+            Optional<String> attribute,
+            @RequestParam(value = "value", required = false)
+            @Parameter(description = "Фраза для поиска")
+            Optional<String> searchText,
+            @RequestParam(value = "page", required = false)
+            @Parameter(description = "Номер страницы для отображения")
+            Optional<Integer> page,
+            @RequestParam(value = "per_page", required = false)
+            @Parameter(description = "Количество объектов на странице")
+            Optional<Integer> organizationPerPage,
+            @RequestParam(value = "sort_by", required = false)
+            @Parameter(description = "Аттрибут для сортировки")
+            Optional<String> sortBy);
 
-    // Добавить новую организацию
+    @Operation(
+            summary = "Добавить новую организацию",
+            description = "Позволяет добавить новую организацию"
+    )
     @PostMapping
     List<OrganizationForResponse> createOrganization(@RequestBody OrganizationForRequest request);
 
-    // Назначение директора в организацию
+    @Operation(
+            summary = "Назначить директора в организацию",
+            description = "Позволяет назначить директора в организацию по id"
+    )
     @PatchMapping("/{id}/director")
-    OrganizationForResponse assignDirectorInOrganization(@PathVariable Long id,
-                                                         @RequestBody EmployeeForResponse employee);
+    OrganizationForResponse assignDirectorInOrganization(
+            @PathVariable
+            @Parameter(description = "Идентификатор организации")
+            Long id,
+            @RequestBody EmployeeForResponse employee);
 
-    // Редактировать организацию
+    @Operation(
+            summary = "Редактировать организацию",
+            description = "Позволяет отредактировать организацию"
+    )
     @PutMapping("/{id}")
-    List<OrganizationForResponse> updateOrganization(@PathVariable Long id,
-                                        @Valid @RequestBody OrganizationForRequest request);
+    List<OrganizationForResponse> updateOrganization(
+            @PathVariable
+            @Parameter(description = "Идентификатор организации")
+            Long id,
+            @Valid @RequestBody OrganizationForRequest request);
 
-    // Удалить организацию по id
+    @Operation(
+            summary = "Удалить организацию",
+            description = "Позволяет удалить организацию"
+    )
     @DeleteMapping("/{id}")
-    List<OrganizationForResponse> deleteOrganization(@PathVariable Long id);
+    List<OrganizationForResponse> deleteOrganization(
+            @PathVariable
+            @Parameter(description = "Идентификатор организации")
+            Long id);
 }

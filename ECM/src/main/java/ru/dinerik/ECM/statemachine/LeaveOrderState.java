@@ -3,6 +3,7 @@ package ru.dinerik.ECM.statemachine;
 // StateMachine для установки состояний для документа поручение
 public enum LeaveOrderState {
     PREPARE {
+        final String status = "Подготовка документа";
         @Override
         public LeaveOrderState nextState(Boolean isCheck) {
             if(isCheck)
@@ -12,11 +13,12 @@ public enum LeaveOrderState {
 
         @Override
         public String getStatus() {
-            return "Подготовка документа";
+            return status;
         }
     },
 
     PERFORM {
+        final String status = "Документ в работе";
         @Override
         public LeaveOrderState nextState(Boolean isCheck) {
             if(isCheck)
@@ -26,10 +28,11 @@ public enum LeaveOrderState {
 
         @Override
         public String getStatus() {
-            return "Документ в работе";
+            return status;
         }
     },
     CONTROL {
+        final String status = "Документ проходит контроль";
         @Override
         public LeaveOrderState nextState(Boolean isCheck) {
             if(isCheck)
@@ -39,10 +42,11 @@ public enum LeaveOrderState {
 
         @Override
         public String getStatus() {
-            return "Документ проходит контроль";
+            return status;
         }
     },
     REFORM {
+        final String status = "Документ на доработке";
         @Override
         public LeaveOrderState nextState(Boolean isCheck) {
             return PERFORM;
@@ -50,10 +54,11 @@ public enum LeaveOrderState {
 
         @Override
         public String getStatus() {
-            return "Документ на доработке";
+            return status;
         }
     },
     ACCEPT {
+        final String status = "Документ принят";
         @Override
         public LeaveOrderState nextState(Boolean isCheck) {
             return this;
@@ -61,8 +66,9 @@ public enum LeaveOrderState {
 
         @Override
         public String getStatus() {
-            return "Документ принят";
+            return status;
         }
+
     };
 
     public abstract LeaveOrderState nextState(Boolean isCheck);

@@ -1,6 +1,6 @@
 package ru.dinerik.ECM.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,15 +18,10 @@ import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository repository;
-
-    @Autowired
-    public OrderServiceImpl(OrderRepository repository) {
-        this.repository = repository;
-    }
-
 
     // Получить поручение по id
     @Override

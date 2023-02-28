@@ -1,7 +1,7 @@
 package ru.dinerik.ECM.controller.impl;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.OrderController;
 import ru.dinerik.ECM.dto.order.OrderForRequest;
@@ -15,16 +15,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderControllerImpl implements OrderController {
 
     private final OrderService service;
     private final OrderMapper mapper;
-
-    @Autowired
-    public OrderControllerImpl(OrderService service, OrderMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
 
     // Получить поручение по id
     @Override
@@ -35,7 +30,7 @@ public class OrderControllerImpl implements OrderController {
 
     // Получить список поручений с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
     @Override
-    @GetMapping("/search")
+    @GetMapping("")
     public List<OrderForResponse> orderTable(@RequestParam(value = "attr", required = false) Optional<String> attribute,
                                          @RequestParam(value = "value", required = false) Optional<String> searchText,
                                          @RequestParam(value = "page", required = false) Optional<Integer> page,

@@ -1,7 +1,7 @@
 package ru.dinerik.ECM.controller.impl;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.OrganizationController;
 import ru.dinerik.ECM.dto.employee.EmployeeForResponse;
@@ -16,16 +16,11 @@ import java.util.stream.Collectors;
 
 @RestController     // @Controller + @ResponseBody над каждым методом
 @RequestMapping("/organization")
+@RequiredArgsConstructor
 public class OrganizationControllerImpl implements OrganizationController {
 
     private final OrganizationService service;
     private final OrganizationMapper mapper;
-
-    @Autowired
-    public OrganizationControllerImpl(OrganizationService service, OrganizationMapper mapper) {
-        this.service = service;
-        this.mapper = mapper;
-    }
 
     // Получить организацию по id
     @Override

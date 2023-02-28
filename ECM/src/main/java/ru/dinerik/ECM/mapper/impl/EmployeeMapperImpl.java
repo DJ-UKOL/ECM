@@ -1,3 +1,4 @@
+/*
 package ru.dinerik.ECM.mapper.impl;
 
 import org.springframework.stereotype.Component;
@@ -31,4 +32,4 @@ public class EmployeeMapperImpl implements EmployeeMapper {
                 source.getJobTitle()
         );
     }
-}
+}*/

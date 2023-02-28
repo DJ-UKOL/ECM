@@ -1,3 +1,4 @@
+/*
 package ru.dinerik.ECM.mapper.impl;
 
 import org.springframework.stereotype.Component;
@@ -68,4 +69,4 @@ public class OrderMapperImpl implements OrderMapper {
 
         return orderForResponse;
     }
-}
+}*/

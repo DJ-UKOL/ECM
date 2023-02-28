@@ -1,6 +1,6 @@
 package ru.dinerik.ECM.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,18 +20,12 @@ import java.util.Optional;
 // Бизнес логика
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class DivisionServiceImpl implements DivisionService {
 
     private final DivisionRepository repository;
     private final EmployeeService employeeService;
     private final OrganizationService organizationService;
-
-    @Autowired
-    public DivisionServiceImpl(DivisionRepository repository, EmployeeService employeeService, OrganizationService organizationService) {
-        this.repository = repository;
-        this.employeeService = employeeService;
-        this.organizationService = organizationService;
-    }
 
     // Получить подразделение по id
     @Override

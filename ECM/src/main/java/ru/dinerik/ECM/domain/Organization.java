@@ -2,6 +2,7 @@ package ru.dinerik.ECM.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.List;
 // Организация
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "organizations")
 public class Organization {
@@ -34,10 +36,4 @@ public class Organization {
     // Отношение один ко многим (у одной организации много подразделений)
     @OneToMany(mappedBy = "organization")
     private List<Division> divisions;
-
-    public Organization(String fullName, String postalAddress, String legalAddress) {
-        this.fullName = fullName;
-        this.postalAddress = postalAddress;
-        this.legalAddress = legalAddress;
-    }
 }

@@ -1,5 +1,9 @@
 logging:
   level:
+    net:
+      ttddyy:
+        dsproxy:
+          listener: debug
     ru:
       dinerik:
         ECM: info
@@ -21,8 +25,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql:
-      true
+#    show-sql:
+#      true
 server:
   port: 8080
   error:

@@ -76,7 +76,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional
     public Organization assignDirector(Long id, Long directorId) {
-        findById(id).setDirector(employeeService.findById(directorId));
+        Organization organization = findById(id);
+        organization.setDirector(employeeService.findById(directorId));
+        repository.save(organization);
         return findById(id);
     }
 

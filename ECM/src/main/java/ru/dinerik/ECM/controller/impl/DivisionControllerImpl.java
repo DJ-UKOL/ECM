@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.DivisionController;
 import ru.dinerik.ECM.dto.division.DivisionForRequest;
 import ru.dinerik.ECM.dto.division.DivisionForResponse;
-import ru.dinerik.ECM.dto.employee.EmployeeForResponse;
-import ru.dinerik.ECM.dto.organization.OrganizationForResponse;
 import ru.dinerik.ECM.mapper.DivisionMapper;
 import ru.dinerik.ECM.service.DivisionService;
 
@@ -52,16 +50,20 @@ public class DivisionControllerImpl implements DivisionController {
 
     // Назначение управляющего в подразделение
     @Override
-    @PatchMapping("/{id}/manager")
-    public DivisionForResponse assignManagerInDivision(@PathVariable Long id, @RequestBody EmployeeForResponse manager) {
-        return mapper.responseToDivisionDto(service.assignManager(id, manager.getId()));
+    @PatchMapping("/{id}/assignManager")
+    public DivisionForResponse assignManagerInDivision(
+            @PathVariable Long id,
+            @RequestParam("managerId") Long managerId) {
+        return mapper.responseToDivisionDto(service.assignManager(id, managerId));
     }
 
     // Прикрепить подразделение к организации
     @Override
-    @PatchMapping("/{id}/organization")
-    public DivisionForResponse assignOrganizationInDivision(@PathVariable Long id, @RequestBody OrganizationForResponse organization) {
-        return mapper.responseToDivisionDto(service.assignOrganization(id, organization.getId()));
+    @PatchMapping("/{id}/assignOrganization")
+    public DivisionForResponse assignOrganizationInDivision(
+            @PathVariable Long id,
+            @RequestParam("organizationId") Long organizationId) {
+        return mapper.responseToDivisionDto(service.assignOrganization(id, organizationId));
     }
 
     // Редактировать подразделение

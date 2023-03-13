@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-tag-1.0.0
+      author: DJ-UKOL
+      changes:
+        - tagDatabase:
+            tag: v.1.0.0
+  - include:
+      file: create-table-employees.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: create-table-organizations.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: create-table-divisions.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: create-table-orders.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: create-table-employees-orders.yaml
+      relativeToChangelogFile: true

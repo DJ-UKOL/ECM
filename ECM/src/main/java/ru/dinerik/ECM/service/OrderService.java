@@ -1,8 +1,10 @@
 package ru.dinerik.ECM.service;
 
 import ru.dinerik.ECM.domain.Order;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 // Интерфейс для работы с сервисом Поручение
 public interface OrderService {
@@ -20,11 +22,14 @@ public interface OrderService {
     // Добавить новое поручение
     List<Order> createOder(Order order);
 
-    // Установить статус исполнение
+    // Передать документ на следующий этап
     Order assignPerformanceSign(Long id, Boolean performanceSign);
 
-    // Установить статус контроль
-    Order assignControlSign(Long id, Boolean controlSign);
+    // Назначить автора поручения
+    Order assignAuthor(Long id, Long authorId);
+
+    // Назначить исполнителей поручения
+    Order assignExecutors(Long id, Set<Long> executorIds);
 
     // Редактировать поручение
     List<Order> updateOrder(Long id, Order order);

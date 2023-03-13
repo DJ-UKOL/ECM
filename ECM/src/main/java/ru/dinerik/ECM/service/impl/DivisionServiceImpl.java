@@ -76,7 +76,9 @@ public class DivisionServiceImpl implements DivisionService {
     @Override
     @Transactional
     public Division assignManager(Long id, Long managerId) {
-        findById(id).setManager(employeeService.findById(managerId));
+        Division division = findById(id);
+        division.setManager(employeeService.findById(managerId));
+        repository.save(division);
         return findById(id);
     }
 
@@ -84,7 +86,9 @@ public class DivisionServiceImpl implements DivisionService {
     @Override
     @Transactional
     public Division assignOrganization(Long id, Long organizationId) {
-        findById(id).setOrganization(organizationService.findById(organizationId));
+        Division division = findById(id);
+        division.setOrganization(organizationService.findById(organizationId));
+        repository.save(division);
         return findById(id);
     }
 

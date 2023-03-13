@@ -75,5 +75,4 @@ public interface EmployeeController {
             @PathVariable
             @Parameter(description = "Идентификатор сотрудника")
             Long id);
-
 }

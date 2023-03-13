@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 'Create_table_employees-orders'
+      author: 'DJ-UKOL'
+      changes:
+        - createTable:
+            tableName: 'employees_orders'
+            columns:
+              - column:
+                  name: employee_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: employees_orders_employee_id_order_id
+                    references: employees(id)
+                    deleteCascade: true
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: employees_orders_order_id_employee_id
+                    references: orders(id)
+                    deleteCascade: true

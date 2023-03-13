@@ -5,9 +5,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
-import ru.dinerik.ECM.dto.employee.EmployeeForResponse;
 import ru.dinerik.ECM.dto.organization.OrganizationForRequest;
 import ru.dinerik.ECM.dto.organization.OrganizationForResponse;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -59,12 +59,12 @@ public interface OrganizationController {
             summary = "Назначить директора в организацию",
             description = "Позволяет назначить директора в организацию по id"
     )
-    @PatchMapping("/{id}/director")
+    @PatchMapping("/{id}/assignDirector")
     OrganizationForResponse assignDirectorInOrganization(
             @PathVariable
-            @Parameter(description = "Идентификатор организации")
-            Long id,
-            @RequestBody EmployeeForResponse employee);
+            @Parameter(description = "Идентификатор организации") Long id,
+            @RequestParam("directorId")
+            @Parameter(description = "Идентификатор сотрудника") Long directorId);
 
     @Operation(
             summary = "Редактировать организацию",

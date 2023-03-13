@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.OrganizationController;
-import ru.dinerik.ECM.dto.employee.EmployeeForResponse;
 import ru.dinerik.ECM.dto.organization.OrganizationForRequest;
 import ru.dinerik.ECM.dto.organization.OrganizationForResponse;
 import ru.dinerik.ECM.mapper.OrganizationMapper;
@@ -53,9 +52,11 @@ public class OrganizationControllerImpl implements OrganizationController {
 
     // Назначение директора в организацию
     @Override
-    @PatchMapping("/{id}/director")
-    public OrganizationForResponse assignDirectorInOrganization(@PathVariable Long id, @RequestBody EmployeeForResponse employee) {
-        return mapper.responseToOrganizationDto(service.assignDirector(id, employee.getId()));
+    @PatchMapping("/{id}/assignDirector")
+    public OrganizationForResponse assignDirectorInOrganization(
+            @PathVariable Long id,
+            @RequestParam("directorId") Long directorId) {
+        return mapper.responseToOrganizationDto(service.assignDirector(id, directorId));
     }
 
     // Редактировать организацию

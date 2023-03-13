@@ -2,20 +2,19 @@ package ru.dinerik.ECM.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 
 // Организация
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "organizations")
 public class Organization {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,4 +35,31 @@ public class Organization {
     // Отношение один ко многим (у одной организации много подразделений)
     @OneToMany(mappedBy = "organization")
     private List<Division> divisions;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Organization that = (Organization) o;
+
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Organization{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", postalAddress='" + postalAddress + '\'' +
+                ", legalAddress='" + legalAddress + '\'' +
+                ", director=" + director +
+                ", divisions=" + divisions +
+                '}';
+    }
 }

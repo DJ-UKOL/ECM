@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,14 +20,12 @@ public class OrderForResponse {
     private String subject;
     @Schema(description = "Срок исполнения поручения")
     private LocalDateTime timeExecution;
-    @Schema(description = "Признак контрольности поручения")
-    private Boolean controlSign;
-    @Schema(description = "Признак исполнения поручения")
-    private Boolean performanceSign;
     @Schema(description = "Текст поручения")
     private String text;
     @Schema(description = "Автор поручения")
     private Long authorId;
+    @Schema(description = "Исполнители поручения")
+    private Set<Long> executorsIds;
     @Schema(description = "Статус поручения")
     private String orderStateString;
 }

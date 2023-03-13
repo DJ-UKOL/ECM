@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 'Create_table_orders'
+      author: 'DJ-UKOL'
+      changes:
+        - createTable:
+            tableName: 'orders'
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: subject
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_execution
+                  type: timestamp(6)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_state
+                  type: smallint
+                  constraints:
+                    nullable: true
+              - column:
+                  name: author_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: orders_author_id_employee_id
+                    references: employees(id)

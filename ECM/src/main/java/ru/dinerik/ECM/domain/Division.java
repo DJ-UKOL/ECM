@@ -2,12 +2,13 @@ package ru.dinerik.ECM.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.Objects;
 
 // Подразделение
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -31,4 +32,29 @@ public class Division {
     @ManyToOne
     private Organization organization;            // Организация
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Division division = (Division) o;
+
+        return Objects.equals(id, division.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Division{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", contactDetails='" + contactDetails + '\'' +
+                ", manager=" + manager +
+                ", organization=" + organization +
+                '}';
+    }
 }

@@ -7,8 +7,6 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.dto.division.DivisionForRequest;
 import ru.dinerik.ECM.dto.division.DivisionForResponse;
-import ru.dinerik.ECM.dto.employee.EmployeeForResponse;
-import ru.dinerik.ECM.dto.organization.OrganizationForResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,26 +55,29 @@ public interface DivisionController {
     List<DivisionForResponse> createDivision(
             @RequestBody DivisionForRequest request);
 
+
     @Operation(
             summary = "Назначить управляющего в подразделение",
             description = "Позволяет назначить управляющего в подразделение"
     )
-    @PatchMapping("/{id}/manager")
+    @PatchMapping("/{id}/assignManager")
     DivisionForResponse assignManagerInDivision(
             @PathVariable
             @Parameter(description = "Идентификатор подразделения") Long id,
-            @RequestBody EmployeeForResponse manager);
-
+            @RequestParam("managerId")
+            @Parameter(description = "Идентификатор сотрудника") Long managerId);
     @Operation(
             summary = "Прикрепить подразделение к организации",
             description = "Позволяет прикрепить подразделение к организации"
     )
-    @PatchMapping("/{id}/organization")
+    @PatchMapping("/{id}/assignOrganization")
     DivisionForResponse assignOrganizationInDivision(
             @PathVariable
             @Parameter(description = "Идентификатор подразделения")
             Long id,
-            @RequestBody OrganizationForResponse organization);
+            @RequestParam("organizationId")
+            @Parameter(description = "Идентификатор организации")
+            Long organizationId);
 
     @Operation(
             summary = "Редактировать подразделение",

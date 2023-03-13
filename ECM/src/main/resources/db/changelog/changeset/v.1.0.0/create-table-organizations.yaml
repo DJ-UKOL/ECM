@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 'Create_table_organizations'
+      author: 'DJ-UKOL'
+      changes:
+        - createTable:
+            tableName: 'organizations'
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: legal_address
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: postal_address
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: director_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: organizations_director_id_employee_id
+                    references: employees(id)

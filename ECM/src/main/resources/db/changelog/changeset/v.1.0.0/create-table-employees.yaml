@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 'Create_table_employees'
+      author: 'DJ-UKOL'
+      changes:
+        - createTable:
+            tableName: 'employees'
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: firstname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lastname
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: patronymic
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: job_title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false

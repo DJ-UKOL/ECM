@@ -71,6 +71,8 @@ public enum LeaveOrderState {
 
     };
 
+
+
     public abstract LeaveOrderState nextState(Boolean isCheck);
     public abstract String getStatus();
 }

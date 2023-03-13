@@ -64,5 +64,4 @@ public class EmployeeControllerImpl implements EmployeeController {
         return service.deleteEmployee(id).stream()
                 .map(mapper::responseToEmployeeDto).collect(Collectors.toList());
     }
-
 }

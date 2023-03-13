@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.dinerik.ECM.controller.OrderController;
+import ru.dinerik.ECM.domain.Order;
 import ru.dinerik.ECM.dto.order.OrderForRequest;
 import ru.dinerik.ECM.dto.order.OrderForResponse;
 import ru.dinerik.ECM.mapper.OrderMapper;
@@ -11,6 +12,7 @@ import ru.dinerik.ECM.service.OrderService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,7 +27,8 @@ public class OrderControllerImpl implements OrderController {
     @Override
     @GetMapping("/{id}")
     public OrderForResponse findById(@PathVariable("id") Long id){
-        return mapper.responseToOrderDto(service.findById(id));
+        Order order = service.findById(id);
+        return mapper.responseToOrderDto(order);
     }
 
     // Получить список поручений с поиском по аттрибутам с пагинацией и сортировкой в формате DTO
@@ -51,17 +54,28 @@ public class OrderControllerImpl implements OrderController {
     // Установить статус исполнено
     @Override
     @PatchMapping("/{id}/performance")
-    public OrderForResponse setPerformanceSign(@PathVariable Long id,
-                                        @RequestBody OrderForRequest request) {
-        return mapper.responseToOrderDto(service.assignPerformanceSign(id, request.getPerformanceSign()));
+    public OrderForResponse setPerformanceSign(
+            @PathVariable Long id,
+            @RequestParam("bool") Boolean bool) {
+        return mapper.responseToOrderDto(service.assignPerformanceSign(id, bool));
     }
 
-    // Установить статус контроль
+    // Назначить автора поручения
     @Override
-    @PatchMapping("/{id}/control")
-    public OrderForResponse setControlSign(@PathVariable Long id,
-                                        @RequestBody OrderForRequest request) {
-        return mapper.responseToOrderDto(service.assignControlSign(id, request.getControlSign()));
+    @PatchMapping("/{id}/assignAuthor")
+    public OrderForResponse assignAuthorInOrder(
+            @PathVariable Long id,
+            @RequestParam("authorId") Long authorId) {
+        return mapper.responseToOrderDto(service.assignAuthor(id, authorId));
+    }
+
+    // Назначить исполнителей поручения
+    @Override
+    @PatchMapping("/{id}/assignExecutor")
+    public OrderForResponse assignExecutorInOrder(
+            @PathVariable Long id,
+            @RequestParam("executorIds") Set<Long> executorIds) {
+        return mapper.responseToOrderDto(service.assignExecutors(id, executorIds));
     }
 
     // Редактировать поручение

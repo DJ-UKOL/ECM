@@ -10,6 +10,7 @@ import ru.dinerik.ECM.dto.order.OrderForResponse;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 // Интерфейс для работы с контроллером Поручение
 @RequestMapping("/order")
@@ -56,26 +57,39 @@ public interface OrderController {
     List<OrderForResponse> createOrder(@RequestBody OrderForRequest request);
 
     @Operation(
-            summary = "Установить статус исполнено",
-            description = "Позволяет установить статус исполнено"
+            summary = "Передать документ на следующий этап",
+            description = "Позволяет передать документ на следующий этап"
     )
     @PatchMapping("/{id}/performance")
     OrderForResponse setPerformanceSign(
             @PathVariable
             @Parameter(description = "Идентификатор поручения")
             Long id,
-            @RequestBody OrderForRequest request);
+            @RequestParam("bool")
+            @Parameter(description = "Статус да или нет")
+            Boolean bool);
 
     @Operation(
-            summary = "Установить статус контроль",
-            description = "Позволяет установить статус контроль"
+            summary = "Назначить автора поручения",
+            description = "Позволяет назначить автора поручения"
     )
-    @PatchMapping("/{id}/control")
-    OrderForResponse setControlSign(
+    @PatchMapping("/{id}/assignAuthor")
+    OrderForResponse assignAuthorInOrder(
             @PathVariable
-            @Parameter(description = "Идентификатор поручения")
-            Long id,
-            @RequestBody OrderForRequest request);
+            @Parameter(description = "Идентификатор поручения") Long id,
+            @RequestParam("authorId")
+            @Parameter(description = "Идентификатор сотрудника") Long authorId);
+
+    @Operation(
+            summary = "Назначить исполнителей поручения",
+            description = "Позволяет назначить исполнителей поручения"
+    )
+    @PatchMapping("/{id}/assignExecutor")
+    OrderForResponse assignExecutorInOrder(
+            @PathVariable
+            @Parameter(description = "Идентификатор поручения") Long id,
+            @RequestParam("executorIds")
+            @Parameter(description = "Идентификатор сотрудников") Set<Long> executorIds);
 
     @Operation(
             summary = "Редактировать поручение",
